@@ -107,6 +107,6 @@ The main objectives of the project are to develop a micro-service with two inter
 | --------------- | ----------- | ---------- | 
 | 1.0 | Implemented using Java/Groovy and the gNMI/gRPC framework |M|
 | 2.0 | Developed using the Spring Boot framework  |M|
-| 3.0 | Developed using the Spring Boot framework  |M|
+| 3.0 | Clear and complete documentation  |M|
 | 4.0 | Authentication, authorization, and access control  |O|
 | 5.0 | Cloud-based platform compatibility (e.g., AWS, GCP) |O|
