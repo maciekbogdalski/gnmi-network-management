@@ -102,7 +102,7 @@ Notifications about changes in operational data based on the subscription types 
 This subsection presents structural diagrams for the system module, including class and object diagrams to provide a comprehensive understanding of the system's structure and component organization.
 
 #### <a name="cd"></a>  4.1.1 Class Diagram
-![Class Diagram](https://www.plantuml.com/plantuml/dpng/VLAzQeOm5Dtp525JVr3QjPFGB5rSx0kaIIgXcaXoOocbxzuFhs0k1ZSvFuTphkaIg0XvdfYUL4gyj_0TufUqgzEM_pBE6xDzlyaNFa1qVZomNitsZBx_B2NwE5gGUyJTVON0d2g5OPHAnEMB2ZVP6fn1KUa7R4H4VsnV_1hyfnjpLE22nyLwW-XYnAG2HNi2-icsWq07fHAX32RMkmtv8-debgDQAX1Ia32LNr16aR9dkdfp8hWuAdr0ubdmfk7YgMqV13trbP8CPvtr9i_JFm00)
+![Class Diagram](https://www.plantuml.com/plantuml/dpng/jP4zReD048LxJh5beiWNSEL8D3HH54umm416MMRm_DX5bBj7o382cTRbV6zttwUTapcenvYBDeDP-a2_YlwKUA4Mqs-HqbimdGEhyfXgL-9XPgrmJqCeE0cl0vdm1Y6NuB14VyMzGDI_6mdkAdRK7kurn5Fu-sUrUIty4Ox0C60TZRLAqzprydfC5w5kJWrzFGxRqMwt6bp35YPeA9CJsi8NuLfYNxWNlO9sNtWEj4sBAx1bS5oof_ZjVUNXi5rXiQV_SEY4tCMO_m40)
 
 ##### <a name="cd-description"></a>  4.1.1.1 Class Description
 | Class  | Description |
@@ -112,7 +112,7 @@ This subsection presents structural diagrams for the system module, including cl
 | NetworkDevice  | This class represents a network device in the system. It stores the device's unique identifier and other relevant information  |
 
 #### <a name="od"></a>  4.1.2 Object Diagram
-![Object diagram](https://www.plantuml.com/plantuml/dpng/jP4zReD048LxJh5beiWNSEL8D3HH54umm416MMRm_DX5bBj7o382cTRbV6zttwUTapcenvYBDeDP-a2_YlwKUA4Mqs-HqbimdGEhyfXgL-9XPgrmJqCeE0cl0vdm1Y6NuB14VyMzGDI_6mdkAdRK7kurn5Fu-sUrUIty4Ox0C60TZRLAqzprydfC5w5kJWrzFGxRqMwt6bp35YPeA9CJsi8NuLfYNxWNlO9sNtWEj4sBAx1bS5oof_ZjVUNXi5rXiQV_SEY4tCMO_m40)
+![Object diagram](https://www.plantuml.com/plantuml/dpng/RSmn3i8m343HFQUmkdVeobIXB5sov0HkQcYWiQN4fjT7HQXYOFvFVsoALQriJkO79OKkIDLr5kDbOgLwmqH31zWWNAVXL57ilug_Af3kKf-UNlcy-C6vOmLz_y5mWIIb6EU4IWtshAkBNn3yqGiotgcvaNYnihq1)
 
 #### <a name="dm"></a>  4.2 Dynamic Models
 ![Dynamic Models](https://www.plantuml.com/plantuml/dpng/fOynReGm44LxdsAqVIv04UqcAD8s544vm6263LgmoSmuYDi71u6ioAcsjFJy_hopABA6SJ1erJDy2B5fV70jyWAdohD-_ZxXwfIuGqidG87gvPfWjGzvh5wn5XKR55fjfBFdEvJqtU-UqfYu2K_FqLd0Etq54WNhNTVV0gFsta6OLWkPbOXW7S4tppDocmM1DukfjmzLMS1bceRb7srvM2_sxlmyK7kZtIN1MX8vNEau7lX8JlVxOb01bTU-M_vQyhKI6h7SJ_6gR6KAvEfUcRQLr9FFIfb7uxAkCxasZCCF)
