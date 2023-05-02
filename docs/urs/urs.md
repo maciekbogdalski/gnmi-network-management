@@ -3,7 +3,7 @@
 ##### DIBRIS – Università di Genova. Scuola Politecnica, Software Engineering Course 80154
 
 
-**VERSION : 3.0**
+**VERSION : 4.0**
 
 **Authors**  
 Maciej Bogdalski
@@ -16,6 +16,7 @@ Soodeh Bakrani
 | 1.0 | 2023-03-29 | Maciej Bogdalski, Soodeh Bakrani | First draft |
 | 2.0 | 2023-04-06 | Maciej Bogdalski, Soodeh Bakrani | Content accepted by the client after corrections |
 | 3.0 | 2023-04-17 | Maciej Bogdalski, Soodeh Bakrani | Changed layout |
+| 4.0 | 2023-04-28 | Maciej Bogdalski, Soodeh Bakrani | Corrections in Functional Requirements. URS accepted.  |
 
 # Table of Contents
 
@@ -94,7 +95,7 @@ The main objectives of the project are to develop a micro-service with two inter
 
 | ID | Descrizione | Priorità |
 | --------------- | ----------- | ---------- | 
-| 1.0 |  The microservice must have two interfaces: a northbound interface for receiving requests and managing subscriptions, and a southbound interface for forwarding or translating requests to their intended nodes. The northbound interface should define input and output APIs for the microservice using Open-API and include a field for identifying the intended network element for each request. Both interfaces should support the following RPCs: Set, Get, Subscribe, and Capabilities. The Subscribe RPC should allow for streaming (continuous updates), polling (periodic updates), and once (single update) subscription types. |M|
+| 1.0 |  The microservice must have two interfaces: a northbound interface for receiving requests, managing subscriptions, and automatically receiving updates on configuration changes, and a southbound interface for forwarding or translating requests to their intended nodes. The northbound interface should define input and output APIs for the microservice using Open-API and include a field for identifying the intended network element for each request. Both interfaces should support the following RPCs: Set, Get, Subscribe, and Capabilities. The Subscribe RPC should allow for streaming (continuous updates), polling (periodic updates), and once (single update) subscription types. Additionally, users should be able to initiate on-demand configuration polling. |M|
 | 2.0 |  Install, manipulate, and delete configuration of network devices |M|
 | 3.0 |  View operational data from network devices |M|
 | 4.0 |  Support periodic updates for operational data |M|
