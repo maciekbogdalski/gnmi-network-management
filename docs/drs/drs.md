@@ -1,4 +1,4 @@
-# Title of the project
+# Innovative Management Stack
 
 ## Design Requirement Specification Document
 
@@ -130,17 +130,17 @@ This subsection presents structural diagrams for the system module, including cl
 #### <a name="od"></a>  4.1.2 Object Diagram
 ![Object diagram](https://www.plantuml.com/plantuml/dpng/dPA_3i8W48Ttdg8lm617foQwEEWxK7egAeU1GmVZkzkcIgpX93fUFhxxymjD8EKfsfDmxG4qLUWyxLiNiLiXWTyg3TLDtCMB1nVptAJIR82kpX-NS34Q5ixQY4OhCWudhRedHmGzmBL2jGC_7HVReBqvStpiaIFuliICH_M8SdTB-VMMUQLJ3K6aPFxkmEp0vDJRCV1p2nQ7fSnbNhO-yku5Ex0Vd3evXIJO-yjl6y1k-EmF)
 
-#### <a name="dm"></a>  4.2 Dynamic Models
+### <a name="dm"></a>  4.2 Dynamic Models
 The dynamic models section presents a series of sequence diagrams that depict the interactions between the system components during various operations, emphasizing the behavior and collaboration of objects over time.
 
-##### <a name="rdc"></a> 4.2.1 Retrieving device configuration
+#### <a name="rdc"></a> 4.2.1 Retrieving device configuration
 ![Retrieve Device Config](https://www.plantuml.com/plantuml/dpng/bPJ1JiCm38RlVeeSEucz00SqQLnwO0VW1KBYbOhLXZGPhyyoQrGHbYjEaTpyd__yJhERiq-vJ2Vm8NDo-zE8b05aTTi7T-2Ktz-uKEmfOphwWExUpKZn6RyAphbBicugOZpxZ9e6G2bM_YEUnu1Fdlo0wK8UC4kfYzUbZmkutGpGQgjPpD-SFgI-1cis0xJQhM9D611HH_pnewUdWXhbIbPx9iABa6cn5gJM2RbDJ9C0A1-C59TzROlr75TjIyrELPCR-UfObMEa_SB5llclBCZR7t3db5kcK02KOktODoVVypGL6eElPcKC1uxr0CTnAEbQxeXZqyzY05WDzC6ttVupTVimOU5QmxSTwqEow6Ow2ikuP0ddJwOP1MyCkyerhBonlrTAQDqDkwbSwq7T8SNwSFy0)
 
-##### <a name="rdc"></a> 4.2.2 Updating device configuration
+#### <a name="rdc"></a> 4.2.2 Updating device configuration
 ![Updating device configuration](https://www.plantuml.com/plantuml/dpng/RP51ZeCm34NtEKMMWpHSO1O8YTcm6ExWIGoDIcraJ7lzWbAfDShs-_ivJsbN1T7jDZi8okAxEI6fM_OmXRG0gHzOzFBF6yMU56M4W6R-Y_SKy0y89fJ2f6CY39gOIfq1zS5opLNdydrVDwMp_iUlg0F7WpccQHCui5-q9ttyzk4phLo9K3VslJjoGitHYrCvsyWhHiGilsCBEFSpolXc8IjpacYHul4zJm00)
 
-##### <a name="rdc"></a> 4.2.3 Subscription management (create, update, delete)
+#### <a name="rdc"></a> 4.2.3 Subscription management (create, update, delete)
 ![Subscription management](https://www.plantuml.com/plantuml/dpng/hPF1IiD048Rl-nH3JnNg2mYLGhtqO3te2qnsVtKnsLacauflxzQ8D9906te9WVdt-_OVs4rhhDOrjMDlehIj8vAvp6hHnyp9Q2zgxvLqAUoIGL_POp1_xghMQymM9JrouZVeOFw0G_JOIahmKvazx5Fqeuywrz-2Rk_7v7H7pG_YLBoK3ENZtugI1Ep2YjgJ-SjNneqReHN9M8CYoIKWsZpru7CLN1lz1MczfeLNi67XQCnJz5CBAbVW47xFLD3bj9Ic60K_tEq5KDGj_bNfSfXRfJzw_JOzTswXW1ep2oaQELoxq6LSfE0svNDyljy0)
 
-##### <a name="rdc"></a> 4.2.4 Device connection management (connect, disconnect)
+#### <a name="rdc"></a> 4.2.4 Device connection management (connect, disconnect)
 ![Device Connection Management](https://www.plantuml.com/plantuml/dpng/fPB1QiCm38RlUWhHKmlR2mmw2jsbX-qTL5jRnHmvoEhs-dEJiSmbEULY3DB__P_1X-9aVkqIKF1iU4p2wj2JkGJfIHtVildbdAyQJ-fixnIucR_mbmG-PbKEBbbVIUc3hMMmVsVx75S1nXPyV9w3unDs0s92RdFFHhVR0yQ1SOexeEJuDy3z7ZTXJ6m0vy2rRqcsTlvcjnCVbxOhg7rHZNDnEYSfbt_ME-1K-CunIbcZMUChJPsj4oNdrbGZ7Efn-me_)
