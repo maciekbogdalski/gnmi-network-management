@@ -190,30 +190,32 @@ The dynamic models section presents a series of sequence diagrams that depict th
 
 #### <a name="rdc"></a> 4.2.1 Retrieving device configuration
 ![Retrieve Device Config](https://www.plantuml.com/plantuml/png/XP8nJiKm38Ptdo9Zt_0km82UL1O66E04eR5AfTQ1sEtvSN6ZggBcJOui_r--ABwnn2BpD4Bi99VGZWEI05WDryVmcejyVkIPKfkdhqnh-o4mKdh3xnbPccBriYA69GgUPG3EGCf_mcNey2LIxB4ekKUnLfD-otFQmSTXW6FswjeQ2H9we7_Tsao46ioqMtO55VEEpDfsJVz60JocRyzsIzNtwVv3Dj5x7rVd06h0joh8UcOqhKFSqL2KhLNLs0XDHLsCvU_GJLFhhlu0)
-1. The Client sends a `getConfiguration()` request to the NorthboundInterface.
-2. The NorthboundInterface retrieves the device (identified by the provided deviceId) from the DeviceManager.
-3. The NorthboundInterface then asks the DeviceConnectionManager to create a new Session for the device.
-4. The DeviceConnectionManager returns the newly created Session.
-5. The NorthboundInterface sends a request to the Session to get the device configuration.
-6. The Session communicates with the NetworkDevice to retrieve the configuration.
-7. Once the Session has the configuration, it sends it back to the NorthboundInterface.
-8. The NorthboundInterface then sends the configuration back to the Client.
+1. The Client sends a `getConfiguration()` request to the `NorthboundInterface`.
+2. The `NorthboundInterface` retrieves the device (identified by the provided `deviceId`) from the `DeviceManager`.
+3. The `NorthboundInterface` then asks the `DeviceConnectionManager` to create a new `Session` for the device.
+4. The `DeviceConnectionManager` returns the newly created `Session`.
+5. The `NorthboundInterface` sends a request to the `Session` to get the device configuration.
+6. The `Session` communicates with the `NetworkDevice` to retrieve the configuration.
+7. Once the `Session` has the configuration, it sends it back to the `NorthboundInterface`.
+8. The `NorthboundInterface` then sends the configuration back to the Client.
 
 This process enables the system to retrieve device configurations dynamically based on the Client's request, ensuring that the Client always has access to up-to-date device information.
 
 
+
 #### <a name="udc"></a> 4.2.2 Updating device configuration
 ![Updating device configuration](https://www.plantuml.com/plantuml/png/TPEnSiCW38Ptde8nlKjUe4ClLxnuY8VG5w2Wf5mJI45ENxy8NDVgnOCNyUcN_b_dVKQJSBnUXB4OarGN3m75hHIzzJSJK0unuSTx78Fh0q8w6GlIP3cyzWphuEuj74mmPqW4T8S7xog601Pz34jISLH3peMW9yqVulXe5VrlbNu0_8xfytVazJe6RmrEcltGASOpl7hhX6X9oDqBEPNFCWCEqP61ap-FgQfjGgdqRYljilf4MVgxGQWXbOzKkaCHEGEsALFd0YrnYSBive6kWiB10fd55AdP1AKyfRLfFDTK9AgMghdHJ5RDkheImHtXQuICcmp834_rnGWjXAwTHO3rliNcT4rZAnyiJ9VKRHMwKejzThQUCy52r1PoshL6VglL6tMYDEp-HXuXtsB8BFe2JVBDwmf6I3D068UOIQ7dcwn0OcWoqo-vjXTfxI4u-eL_0000)
-1. The Client sends a `setConfiguration()` request to the NorthboundInterface, which includes the new configuration.
-2. The NorthboundInterface retrieves the device (identified by the provided deviceId) from the DeviceManager.
-3. The NorthboundInterface then asks the DeviceConnectionManager to create a new Session for the device.
-4. The DeviceConnectionManager returns the newly created Session.
-5. The NorthboundInterface sends a request to the Session to update the device configuration.
-6. The Session communicates with the NetworkDevice to apply the new configuration.
-7. Once the Session confirms that the configuration update is complete, it sends a confirmation back to the NorthboundInterface.
-8. The NorthboundInterface then sends a confirmation back to the Client.
+1. The Client sends a `setConfiguration()` request to the `NorthboundInterface`, which includes the new configuration.
+2. The `NorthboundInterface` retrieves the device (identified by the provided `deviceId`) from the `DeviceManager`.
+3. The `NorthboundInterface` then asks the `DeviceConnectionManager` to create a new `Session` for the device.
+4. The `DeviceConnectionManager` returns the newly created `Session`.
+5. The `NorthboundInterface` sends a request to the `Session` to update the device configuration.
+6. The `Session` communicates with the `NetworkDevice` to apply the new configuration.
+7. Once the `Session` confirms that the configuration update is complete, it sends a confirmation back to the `NorthboundInterface`.
+8. The `NorthboundInterface` then sends a confirmation back to the Client.
 
 This process allows the system to dynamically update device configurations based on the Client's request. This ensures that device configurations can be updated as needed without manual intervention.
+
 
 
 #### <a name="sm"></a> 4.2.3 Subscription management (create, update, delete)
@@ -241,23 +243,24 @@ This process allows the system to dynamically update device configurations based
 #### <a name="dcm"></a> 4.2.4 Device connection management (connect, disconnect)
 ![Device Connection Management](https://www.plantuml.com/plantuml/png/dLFDJiCm3BxdAQoTEecz0DBGf77f0Gxm15vYjeZKAOaBhq-wLAL1ZH2xL9NjxqVVfnoYO92XSmgr-017Pub5zMbejUsH1PvzaCl93snQ5WflgAdOFzAdrVI4Z6SAAvkZPoOjrlFQpIl5c5Qb8icN3-yPhbJs1Bk7DIjm3zr8kv1fV4y1nxyxC5UErcpL2ZPHbkuJsPaaZveVQ7cpgnh928LEOBO0-priTFQsKG3hDcfH9L8T28Mcc1Qce8gf6uoPfMvZahcUidcXZu6YD7gMc2P9VJvDgAAlX4qNU78sNXQTR1MvIBzoCJOMqTpS4C3_Ehgf2EVZtCEKP6l-Y48eT9PHg8o2ZJgap_ZklW40)
 
-1. The Client sends a request to manage a device connection (either "connect" or "disconnect") to the NorthboundInterface.
-2. The NorthboundInterface asks the DeviceManager to get the NetworkDevice associated with the provided deviceId.
-3. The DeviceManager returns the NetworkDevice to the NorthboundInterface.
+1. The Client sends a request to manage a device connection (either "connect" or "disconnect") to the `NorthboundInterface`.
+2. The `NorthboundInterface` asks the `DeviceManager` to get the `NetworkDevice` associated with the provided `deviceId`.
+3. The `DeviceManager` returns the `NetworkDevice` to the `NorthboundInterface`.
 
 If the operation is to "connect":
 
-4. The NorthboundInterface requests the DeviceConnectionManager to create a new Session for the device.
-5. The DeviceConnectionManager returns the newly created Session.
-6. The NorthboundInterface sends a connection request to the Session.
-7. The Session communicates with the NetworkDevice to establish the connection.
+4. The `NorthboundInterface` requests the `DeviceConnectionManager` to create a new `Session` for the device.
+5. The `DeviceConnectionManager` returns the newly created `Session`.
+6. The `NorthboundInterface` sends a connection request to the `Session`.
+7. The `Session` communicates with the `NetworkDevice` to establish the connection.
 
 If the operation is to "disconnect":
 
-4. The NorthboundInterface asks the DeviceManager to get the NetworkDevice associated with the provided deviceId (again).
-5. The DeviceManager returns the NetworkDevice to the NorthboundInterface.
-6. The NorthboundInterface requests the DeviceConnectionManager to close the Session associated with the deviceId.
-7. The Session communicates with the NetworkDevice to terminate the connection. 
+4. The `NorthboundInterface` asks the `DeviceManager` to get the `NetworkDevice` associated with the provided `deviceId` (again).
+5. The `DeviceManager` returns the `NetworkDevice` to the `NorthboundInterface`.
+6. The `NorthboundInterface` requests the `DeviceConnectionManager` to close the `Session` associated with the `deviceId`.
+7. The `Session` communicates with the `NetworkDevice` to terminate the connection. 
 
-This process shows how the connection management for devices is handled in the system. The NorthboundInterface coordinates with other components, such as DeviceManager and DeviceConnectionManager, to handle the requests from the Client. The actual communication with devices is handled through Sessions, which manage the lifecycle of the connection and the communication to the NetworkDevices.
+This process shows how the connection management for devices is handled in the system. The `NorthboundInterface` coordinates with other components, such as `DeviceManager` and `DeviceConnectionManager`, to handle the requests from the Client. The actual communication with devices is handled through `Sessions`, which manage the lifecycle of the connection and the communication to the `NetworkDevices`.
+
 
