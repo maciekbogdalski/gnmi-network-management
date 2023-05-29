@@ -74,11 +74,11 @@ This project aims to address the need for an efficient and scalable way to manag
 
 ### 2.2 Project Obectives 
 The main objectives of the project are to develop a micro-service with two interfaces (northbound and southbound) for the efficient management of network devices and to support operational data retrieval with periodic updates. the service should be able to:
--Identify the gNMI/gRPC Java/Groovy implementation
--Define input and output APIs for the microservice based on Open-API
--Implement the gNMI/gRPC client and wrap it into a microservice based on SpringBoot 
--Build a test gNMI server to validate the client
--Test the gNMI primitives using the test environment
+- Identify the gNMI/gRPC Java/Groovy implementation
+- Define input and output APIs for the microservice based on Open-API
+- Implement the gNMI/gRPC client and wrap it into a microservice based on SpringBoot 
+- Build a test gNMI server to validate the client
+- Test the gNMI primitives using the test environment
 <a name="p3"></a>
 
 ## 3. Requirements
