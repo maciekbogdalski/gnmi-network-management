@@ -15,6 +15,7 @@ Version | Data | Author(s)| Notes
 2 | 04/05/23 | MACIEJ BOGDALSKI <br> SOODEH BALANI | Revised structure of the project
 3 | 18/05/23 | MACIEJ BOGDALSKI <br> SOODEH BALANI | Changes made in the architecture 
 4 | 31/05/23 | MACIEJ BOGDALSKI <br> SOODEH BALANI | Modified dynamic models and relations between classes
+5 | 07/06/23 | MACIEJ BOGDALSKI <br> SOODEH BALANI | Revised concept of the session
 
 ## Table of Content
 
@@ -87,13 +88,16 @@ The micro-service has a modular architecture with two main components: Northboun
 ### <a name="interfaces"></a>  3.2 System Interfaces and Components
 In this section, we describe the primary points of interaction (interfaces) within the system, as well as key components of the system architecture. The key interfaces and components are:
 
-| Component  | Description |
-| ------------- | ------------- |
-| Northbound Component | This component serves as the interface for external clients. It receives and processes the requests from clients, translates them into device-specific operations, and forwards these operations to the southbound component for execution. |
-| Southbound Component  | This component serves as the interface for the network devices. It takes device-specific operations from the northbound component, translates them into device-communicable commands, and interacts with the devices for command execution and response collection. |
-| DeviceManager Component  | This component acts as the device catalog for the network. It is responsible for managing the device entries and provides the necessary information to the northbound and southbound components for device-specific operation translation and execution.  |
-| INetworkDeviceCommunication | This is the communication interface implemented by both the Northbound and Southbound components. It contains the methods that enable communication between these two components for carrying out operations on the network devices. |
-| Network Devices | These represent the physical devices in the network. They communicate with the Southbound Component to receive commands and return responses. |
+| Component                 | Description |
+| ------------------------- | --------------------------------------------------------------------------------------------------------- |
+| NorthboundComponent       | This component serves as the interface for external clients. It receives and processes the requests from clients, and interacts with the DeviceManager for device-related operations. |
+| SouthboundComponent       | This component serves as the interface towards the network devices. It takes operations from the NorthboundComponent, translates them into device-communicable commands, and interacts with the DeviceConnectionManager for handling sessions with devices. It also implements the INetworkDeviceCommunication interface for carrying out operations on the network devices. |
+| DeviceManager             | This component acts as the device catalog for the network. It is responsible for managing the device entries, and provides the necessary information to the NorthboundComponent for device-specific operation translation and execution. |
+| DeviceConnectionManager   | This component is responsible for managing the device sessions. It creates, retrieves, and closes sessions according to the requests from the SouthboundComponent. |
+| Session                   | This is a class that represents a session with a network device. It carries out the operations on the NetworkDevice using the INetworkDeviceCommunication interface implemented by the SouthboundComponent. |
+| INetworkDeviceCommunication | This is the communication interface implemented by the SouthboundComponent and used by the NorthboundComponent. It contains the methods that enable communication for carrying out operations on the network devices. |
+| NetworkDevice             | These represent the physical devices in the network. They are managed by the DeviceManager and communicate with the SouthboundComponent via sessions to receive commands and return responses. |
+
 
 
 
@@ -169,18 +173,19 @@ The following table shows the types of outputs from the Southbound Component:
 This subsection presents structural diagrams for the system module, including class and object diagrams to provide a comprehensive understanding of the system's structure and component organization.
 
 #### <a name="cd"></a>  4.1.1 Class Diagram
-![Class Diagram](https://www.plantuml.com/plantuml/png/bLN1Rjim3BtxAuYSqcqsjgjH51tQIu2jXsNx04LYNM6sb8boUYZsxvDCrR0yDKKkaI0-FZu-KyejUU7yEFILx0KHF5ZddmvsDEhE3aThq7XugG0-7fsLIFG3_un8VkjuRI4TNCKTXGJ2Y9OEXSTxF6c9MpKjE_DeMxYVzo7ZPBMAQ8Kzhj6gXRrtsdGBN8UUGTzqa102SRtcevlgRvLwsDlnR0-Sy3tiH8VqNy5FC72eXOHPI20qAhNyqp9HWM3jJYA84iM1l1FI0sjDMeG9PHoh54fbn2qye7-sxZUVBiGu7Epf4jzAe8myGzDiyHB3JclZqJqAYR3BWi7nOJHQ2g-jWPV4Lx182I_2E8JVrUZGPN2UjFru8EdqCLOjPDCYp7EuJ5XDenH6OfynPlbhX-V1owsScg_NMZA3Toewd08powkHng2C1RFXIEqYKQdJoCQX2TjRcg74wndr2VccxZgZM3IJ4bCtvzlCxb3X7SccMw8-lTxJI96sKN9-RwwRflXojV2Ba5RWpPSDsDhfxidNiFdSD1ysgo_NmjUkSzZn46yvaQwgqiCIsUewBcz-k417PAMUwAerAfUbxBC9R45ISZLaJyL8ivYxE01HJ8el1UHTv6LBzZJDpTdho_OLssR_tYVO3SSUXv11rIqQ5Vze_W40)
+![Class Diagram](https://www.plantuml.com/plantuml/png/bLLDRniX4Btlhq0-fH-xQg-ho4gLN5PgSwZR7q1WOgFkWikmzY7gVo-4YGq4RvIBGSoRDs-U1_O67RTkdiP6Z1oHtHlhTWzcrlBMJ7kZGJlsr33sQM-D0CIVy7S6T5SshZsZWmzXXpu18Q251UxW3WvAm9LyNWRzQ7fsTzhxZ8DHCg0bZ52YPSyspYgzJN1RS17qNNa9FX3MwtYqRlurrCF6p8izn8GVViUtWAyAVcPJ3FMCC8a412sfvLyc4bK8IdU8u2oH973jsMqKnwNC-7fs3-vex9zuccYmC9d3U-ogWJBo38qdPmcJ6Aoq0_l81R0X2tgZfrahmPqocZqHNyKPoHttK-1_Yud1Ty5fm3Rp0mghzg5g9HkJS1o_DA4OGi6rW35ZpF8pXxC_CtFYkVcsr98PF4ZlC0NAaRWrMeC81RFXe7O1iTQfPwCGrNa1Obml8SLe49QmoIHzyw8EB-3pYD31-aGtQ9uZ4xkeKmfTTAfz9ILlY_nRDZQxh9K7AxjF0hnYkko1WhP1StvJhxkk-aJsx3S25k3LrnKphLNRdMlPwalNVLmLizApYCMczcQ5_BODoyNXeBfbE5SWpL5x6b-T34pgqabQgvHuljk0xAZShgavq7NhfJU1b5RxZ1QzJJ1C-n4cdu7D3MWPFbh_0G00)
 
 ##### <a name="cd-description"></a>  4.1.1.1 Class Description
 | Class | Description |
 |-------|-------------|
-| NorthboundComponent | Handles the requests coming from the Northbound interface. It processes the requests and sends them to the appropriate classes for further processing. |
-| SouthboundComponent | Responsible for handling and processing device messages. It communicates with the devices using the `Session` instances created by the `DeviceConnectionManager`. It implements the `INetworkDeviceCommunication` interface, defining the behavior for communicating with network devices. |
-| INetworkDeviceCommunication | This is an interface that defines the methods for communication with the network devices. It is implemented by the `SouthboundComponent` class. |
-| DeviceManager | Handles the addition, removal, and retrieval of `NetworkDevice` instances. It maintains a map of device identifiers to their respective `NetworkDevice` instances. |
+| NorthboundComponent | Processes requests from external clients and interacts with the DeviceManager and INetworkDeviceCommunication for device operations. |
+| SouthboundComponent | Responsible for handling device messages. It communicates with network devices using Session instances provided by the DeviceConnectionManager and implements the INetworkDeviceCommunication interface. |
+| DeviceManager | Manages the addition, removal, and retrieval of NetworkDevice instances. It maintains a list of device identifiers and their respective NetworkDevice instances. |
+| INetworkDeviceCommunication | Defines the communication methods with network devices. Implemented by the SouthboundComponent class. |
 | NetworkDevice | Represents a network device in the system. Each device has a unique identifier. |
-| DeviceConnectionManager | Manages the creation and retrieval of `Session` instances for each network device. |
-| Session | Represents a connection to a network device. Each session allows sending requests to a device and receiving messages from it. |
+| DeviceConnectionManager | Manages the lifecycle of Session instances. It creates, tracks, and destroys Session instances according to a defined policy. |
+| Session | Represents an active connection to a network device. It is owned and managed by the DeviceConnectionManager and used by the SouthboundComponent for communication. |
+
 
 
 
@@ -191,80 +196,101 @@ This subsection presents structural diagrams for the system module, including cl
 The dynamic models section presents a series of sequence diagrams that depict the interactions between the system components during various operations, emphasizing the behavior and collaboration of objects over time.
 
 #### <a name="rdc"></a> 4.2.1 Retrieving device configuration
-![Retrieve Device Config](https://www.plantuml.com/plantuml/png/lPInJiGm38PtFqN6kw4lm81EAiiDru5xWj2O4j6p8KdBwzEII139LYa3Koiht-S_YTjJJ3QawJQ2xHC7quuUAG7afsdkJSSXlJpnHAxbsnlJMhup0wQMwTaFKx39CnqSphx7ipkk8Z_RX1898EcMBWzV-CMI7J1aVov9ucenGCqsQkPi0eUoICrsvKcmzG4NnHLZbBSlOG2bA6-_PI9SSAOIwJTj51H0SpRgbcBk0WwtxO91EdhTB0Xsta14Se_uFc5CX_xdC9RY7--YdFNE1Xa2A2__dhh3zC7XDT-Nz85-U-kr03MgZqULrXncRytGNSv7SAYevR3L6LVIpVaed1vIznLqr-JkphSuH7Sx-WsTGC89oQs_vay0)
-1. The `Client` sends a `getConfiguration(deviceId)` request to the `NorthboundComponent`.
-2. The `NorthboundComponent` calls `getDevice(deviceId)` method of the `DeviceManager` to retrieve the `NetworkDevice` instance corresponding to the provided `deviceId`.
-3. The `NorthboundComponent` then requests `DeviceConnectionManager` to create a `Session` for communication with the device by calling `createSession(deviceId)`.
-4. Once the `DeviceConnectionManager` returns the `Session`, the `NorthboundComponent` uses the session to send a `getConfiguration()` request. This request is routed through the `SouthboundComponent` by calling `sendRequestToDevice(deviceId, request)`.
-5. The `SouthboundComponent` communicates with the `NetworkDevice` to fetch the configuration by calling `get(deviceId, data)`.
-6. After the `NetworkDevice` returns the configuration, the `SouthboundComponent` sends the configuration back to the `Session`, which then returns it to the `NorthboundComponent`.
-7. Finally, the `NorthboundComponent` returns the configuration to the `Client`.
+![Retrieve Device Config](https://www.plantuml.com/plantuml/png/bP9DKeGm48NtEKMMus8yW0jhQf8D2rYO4qHeCIKac9_n-gPffG935RfDV_twlLUvXAXzJEF0T1kTvs8mO2ERygDfpQHjv8tpyVtL9Ti9DqxEvZdNWJVNQeL9k9aMQcrr3nu1MQ_cogKz6NKLEpB2MGjjDCwMWcAZ225aObPPEuRuvVm7ISrU9MEKZ9-VqJb_uZt4VENDzCbhF7JgPhpg7h0ASzCHa6H8voLPqmw9xi2ObsNgl5mWXdLG8YI7iV_e0GjYYAC9WIvQ3tb0wNTNi2X4pykXG31wAQ15Lys8xLxWCq68fwsld_VI5LDpbH9JD7NrU1Ubh56oHfARNtmZ7oPd0rPLxZ1L93XSK1I6sZzSs2zsSE4VlTwrYOTnHb_js0Dzi4ikFet3Dm00)
+1. The `Client` sends a `getConfiguration` request to the `NorthboundComponent`. The request includes the `deviceId` of the network device that the configuration is requested for.
+2. The `NorthboundComponent` contacts the `DeviceManager` to fetch the device details using the provided `deviceId`.
+3. Once the `DeviceManager` provides the device details, the `NorthboundComponent` sends a `getConfiguration` request to the `SouthboundComponent`.
+4. The `SouthboundComponent` interacts with the `DeviceConnectionManager` to create a new session with the device.
+5. After the `DeviceConnectionManager` returns the newly created `Session`, the `SouthboundComponent` uses the `Session` to send a `getConfiguration` request. This request uses the gNMI protocol to communicate with the `NetworkDevice`.
+6. The `NetworkDevice` receives the gNMI request, retrieves the configuration details, and sends them back to the `Session` as a gNMI response.
+7. The `Session` forwards the configuration response to the `SouthboundComponent`.
+8. The `SouthboundComponent` then sends a `closeSession` request to the `DeviceConnectionManager` to close the session.
+9. After closing the session, the `SouthboundComponent` forwards the configuration response back to the `NorthboundComponent`.
+10. Finally, the `NorthboundComponent` sends the configuration response back to the `Client`.
 
-This process enables the system to retrieve device configurations dynamically based on the `Client`'s request, ensuring that the `Client` always has access to up-to-date device information.
+
 
 
 
 #### <a name="udc"></a> 4.2.2 Updating device configuration
-![Updating device configuration](https://www.plantuml.com/plantuml/png/hPF1ReCm38RlVeeSEwcym0vJLRZq09FANY03bqLh4vQOxlLd5uHmnwGUTk0IV_xz-q_O9RAHXiiPR4CXclpiq1FqVEWQrrjFfWgHFjx3uDiyNFhWkMviCjN-eB02hwx1qdhROHIWA5Mz3iEQJBtFLsJou3qsv89V2kPtYfWI4pSLxHZfEyJFKKhALG4mRcQo5t5kdar2uYadrmtHog1DUyCFxTOqo_CdISPTBQ4q0d-YKPGiqI6DC-RU1Sph0rFPF71aeCKbCibn2amq4VbuMcjDap40ORc5qtYaXJ4GD9kdf15MHXZYucnMGMguyflGjqVy6Z3HMxXBOlihu8dKw-XjED1_M6MEgDOUDmyuWbeQgu8xUuod42-lFOxqN-rRqrNbOVbC2c21R39mnDG7dzJ5Cm7rlCSwKwiRKOmAKAf2JUzx7MG8OCTHo9_-0m00)
-1. The Client sends a `setConfiguration()` request to the `NorthboundComponent`, which includes the new configuration.
-2. The `NorthboundComponent` retrieves the device (identified by the provided `deviceId`) from the `DeviceManager`.
-3. The `NorthboundComponent` then asks the `SouthboundComponent` to create a new `Session` for the device.
-4. The `SouthboundComponent` communicates with `DeviceConnectionManager` to create a `Session`.
-5. The `DeviceConnectionManager` returns the newly created `Session` to the `SouthboundComponent`, which in turn passes it back to the `NorthboundComponent`.
-6. The `NorthboundComponent` sends a request to update the device configuration to the `SouthboundComponent`.
-7. The `SouthboundComponent` forwards the request to the `Session` via the `DeviceConnectionManager`.
-8. The `Session` communicates with the `NetworkDevice` to apply the new configuration.
-9. Once the `Session` confirms that the configuration update is complete, it sends a confirmation back to the `SouthboundComponent`.
-10. The `SouthboundComponent` then sends a confirmation back to the `NorthboundComponent`.
-11. The `NorthboundComponent` then sends a confirmation back to the Client.
+![Updating device configuration](https://www.plantuml.com/plantuml/png/dPD1KWCX44Ntd89bh38Um8ML2cooc2mo9q2cZPG9ZD0JhsytWoc8erQvfL____idiqbe8axdap0MGvJgvC2Z6EdHMJSQZt8V8hu-XyaFAfp7u6akJPBxxQx1D5oSXSvuSuJ8WEwQUH-c9Pb-gnPaLF0UBBhWQq5remWf4P5LsiI07o6-pL8vgnPYlaokdpYvV9G9a5nUt76AXerMGyPtmxsqzViTD-Ck1e4NXU1j4j4TQHm1PvFhSaNJ_OAezTLnPiG03LBqg8V_XU821MzpACMfR0GQb7OMar6HWjbrPPnf2jTIHRZFY1yEy3v1mjLjpl9UnwBTNBRcdlRTxk7RRJ_MhAaLFOVxMZv06eDFt5x3zTKDIqnVJYW_GWFzLk4ffByQlAsAzTcd_D6MhGWI6ogIlxXF)
+This sequence diagram describes the dynamic behavior of the network device connection management system for setting the configuration of a network device:
 
-This process allows the system to dynamically update device configurations based on the Client's request. This ensures that device configurations can be updated as needed without manual intervention.
+1. The client initiates the configuration setting operation by sending a `setConfiguration(deviceId, configuration)` request to the `NorthboundComponent`.
+2. The `NorthboundComponent` retrieves the device details from the `DeviceManager` by sending a `getDevice(deviceId)` request.
+3. The `DeviceManager` returns the device details to the `NorthboundComponent`.
+4. The `NorthboundComponent` then sends a `sendRequestToDevice(deviceId, setConfigurationRequest)` request to the `SouthboundComponent`.
+5. The `SouthboundComponent` requests the `DeviceConnectionManager` to create a new session for the device by invoking `createSession(deviceId)`.
+6. The `DeviceConnectionManager` creates a new `Session` and returns it to the `SouthboundComponent`.
+7. The `SouthboundComponent` sends a `sendRequest(setConfigurationRequest)` request to the `Session`.
+8. The `Session` sends a `performOperation(setConfigurationRequest, gNMI)` request to the `NetworkDevice` using the gNMI protocol.
+9. The `NetworkDevice` performs the operation and sends a response back to the `Session`.
+10. The `Session` sends the response back to the `SouthboundComponent`.
+11. The `SouthboundComponent` sends the response back to the `NorthboundComponent`.
+12. The `SouthboundComponent` requests the `DeviceConnectionManager` to close the session by invoking `closeSession(deviceId)`.
+13. The `NorthboundComponent` sends the final response back to the client.
 
 
 
 #### <a name="sm"></a> 4.2.3 Subscription management (create, update, delete)
-![Subscription management](https://www.plantuml.com/plantuml/png/vPNFQjmm4CRlUeeX9mVYFa0X9SI--62pr4-WI9D4r9PSIKxfsrSZRSKgwvgQGdle9GJFDx_vD7_O1-UvzUiyCIwyiT1C2hLdI_YeX5guzZ0Owr-VpAfbO-R5w107xc1ux0fPYszAOCyrVq5BWhOlugDPjp3ZOxE1QOpMABmo-XBOl2EYSq4HAQLZzD-C_P9GqMjxVjxfzRjJWa-3aJ5m6XXBJuRw4pq9Fi8SAuxhanDMBUIXCWjQJl_TWGwPdRm3Tn7lzBEvfGhgZNkCdU6JXvm5z_Tm8oo6u0q3YbErjW_5Nj0dcrK2tuPu1eKECY1TdSt9A0vV9Lx8CfJQ6LIfrha_LSefsIGaEEd9IzF_NXhD0AAypjLSIYXDHI49ilbj8KasxPSJ-5NRTzuqnefQViQlApfVNLFFaP91WBWCBOrdwBiFrucvD_k6QE-0G05t6luSHziAHAf_-ckCVbPsvhviQzB6qd5CkyfeSippt9EEh9pflZWFbjJfodOJw6vmSlZkS2HE-9SEXwY7huPo_lt9S2rmAfQgM2Lvv50Iw_YX73DH7iTnn7zo45goX_27Vg9_0000)
+![Subscription management](https://www.plantuml.com/plantuml/png/xLN1RjmW5Bpp5IYdZHJt0ogbYe8lFjYAwYyWy995nU02tgf_Nnwuo6otrceFLG-vh5QyOMRUC9AVVE0kB9CcN0JhADCAJ21pF5H2pTm4EbWNZgzsCPBPQROcpYdtT7ZkAbWB9oMWvuQ_WqD0srVpqIwNQCPdTe66MMD016NDbf2TCOBt4P5OQiSGVbZtBLCbh-swtilnfrU2wy7AD7WP2Cahq-OBhaG_qoafZikh5qxDwE5WPt0S_prGcKWx-K3z1j6PDtkF6kh40wHik0wqtAEFZ_HEE8Z3Eq9nZdfj7-NU8MIZXz_Kzn5Hg6AAX2AoAGOpBfvAsC0ABKOQKLcjMcF7-qOIxwCcqg19rXUsDV6_E6Ne0U5DCU7pXSehGZRyOu8P-HM-B-33uK_VwwJsY0JfpLhCSEYxJpSlZFMWIDIiTfWrRyfDF5JM2t8i2-v1HvBJs6IehRycmejHbVVVqKJSMWD4vsBlNi2YWlPmrbG96lvXKxaHeAk7gvvB_aVjp5vlQUVrItuqqaZo57_mi_GB)
 
 
-1. The `Client` sends a subscription management request to the `NorthboundComponent`. The request includes the operation to be performed (create or delete), the device ID, and, in the case of creation, the subscription information.
+This sequence diagram describes the dynamic behavior of the network device subscription management system.
 
-2. If the operation is "create":
+1. The client initiates a subscription management operation by sending a request to the `NorthboundComponent`.
+2. The `NorthboundComponent` retrieves the device details from the `DeviceManager` using the `deviceId` provided.
+3. Depending on the operation requested by the client, the `NorthboundComponent` interacts with the `SouthboundComponent`.
+   - If the operation is "create":
+     - The `NorthboundComponent` requests the `SouthboundComponent` to create a subscription for the device.
+     - The `SouthboundComponent` requests the `DeviceConnectionManager` to create a new session for the device.
+     - The `DeviceConnectionManager` creates a new `Session` and returns it to the `SouthboundComponent`.
+     - The `SouthboundComponent` sends a subscription creation request to the `Session`.
+     - The `Session` requests the `NetworkDevice` to establish a gNMI subscription and returns the confirmation to the `SouthboundComponent`.
+     - The `SouthboundComponent` requests the `DeviceConnectionManager` to close the session after completion.
+     - The `SouthboundComponent` returns the subscription confirmation to the `NorthboundComponent`, which in turn returns it to the client.
+   - If the operation is "delete":
+     - The `NorthboundComponent` requests the `SouthboundComponent` to cancel a subscription using the `subscriptionId`.
+     - The `SouthboundComponent` requests the `DeviceConnectionManager` to create a new session for the device.
+     - The `DeviceConnectionManager` creates a new `Session` and returns it to the `SouthboundComponent`.
+     - The `SouthboundComponent` sends a subscription cancellation request to the `Session`.
+     - The `Session` requests the `NetworkDevice` to cancel the gNMI subscription and returns the confirmation to the `SouthboundComponent`.
+     - The `SouthboundComponent` requests the `DeviceConnectionManager` to close the session after completion.
+     - The `SouthboundComponent` returns the subscription cancellation confirmation to the `NorthboundComponent`, which in turn returns it to the client.
 
-   - The `NorthboundComponent` calls the `getDevice()` method of the `DeviceManager` to fetch the device details using the provided device ID.
-   - The `DeviceManager` returns the `NetworkDevice` object corresponding to the device ID back to the `NorthboundComponent`.
-   - The `NorthboundComponent` then requests the `SouthboundComponent` to create a new session with the device via the `createSession()` method.
-   - Once the `SouthboundComponent` returns the newly created `Session`, the `SouthboundComponent` uses the session to send a create subscription request.
-   - The `SouthboundComponent` then calls the `createSubscription()` method of the `INetworkDeviceCommunication` interface to create the subscription with the provided details.
-   - Once the subscription is successfully created, a response is sent back up the chain to the `NorthboundComponent`, which is finally sent back to the `Client`.
 
-3. If the operation is "delete":
-
-   - The `NorthboundComponent` requests the `SouthboundComponent` to retrieve the existing session with the device via the `getSession()` method.
-   - Once the `SouthboundComponent` returns the existing `Session`, the `SouthboundComponent` uses the session to send a cancel subscription request.
-   - The `SouthboundComponent` calls the `cancelSubscription()` method of the `INetworkDeviceCommunication` interface to cancel the subscription with the provided subscription ID.
-   - A response confirming the cancellation of the subscription is sent back up to the `NorthboundComponent` and is finally sent back to the `Client`.
 
 
 
 #### <a name="dcm"></a> 4.2.4 Device connection management (connect, disconnect)
-![Device Connection Management](https://www.plantuml.com/plantuml/png/lPD1QlCm48NtEiMGLNxuqmCKKaBiJHRseZc18Ws9g2qPQPnUlpC8XDmwjDrqCoJIzzxJFF0XaOuqZuFIXaA4Pd3eIKryw8oRj2VeGwJR9SpUDc6SWkTxq0dwusc1jNXt1ZljzHMZ06stk3-7UStcV6nMR9hWFHfomTU6pTAnHteFyIqh1EXRfV82i7kH1y8pZAAl_BPXmgZbrt-meiIJ_IVBkxic595IFCIWxLX_HSe1snMQLsHeLy8oeYpMXD83GKc5_Hus9Zzdem1objJ0UXEHHMTCYSag4A0OIbyWarNIoCzKKXt_5tvNqb9MyBd51Pdzore5BBbzAytqtUa94-dBuDAjQhXEPbG1Zohs5TCKVC9bBdFBs7Km5w1mIFYfK-lImrg7a7xTwlSYvhvsEXl3ceUTrjqHnj5v1lwqE_HM7NZ8D_y1)
+![Device Connection Management](https://www.plantuml.com/plantuml/png/vLH1Ri8m4Bpx5IjEL2fzG2KgH7BX42gH5vXa2rOJExKT-ltksk0cDAYLUgdK0nRopixCZbTPEI-jxzj6oCeR2rcZK7lHqQMgL2UrXwsn_hWtlQupqtP6KnsaW-rwCuBbU58L5bBB0re6vCMeNff-YgPSPnCqcT4QAw-C7X9cLupe7242ozWn-dTZNoDLy9eB4IU3nHCxXqTecNWWD3STMid_xg4EdPlwZbDH9-anZ2leO8AyeFu3-YWmdq3Jx0HQ9B484JKE4K8s7f8gB9SmgwATcG28MfmFzSVxhu80YP2313wvYwBYBejKESSqtSMP2WZuHL9piOFkQnmZaq0POBhUuLkFpi_f9_UDSiVFGC-biKbc26-GSuJROlD0yxyOspvVSlWf5Rqfq15jNyXsw6Yr70RhOsWv670QLgOaKe2DST_cTpkczFpJUeGH0Xk7LqjGAtTh3wZqvrV1essL9jplLo5H_OTLe0Z5YWx-67y0)
 
-This sequence diagram describes the dynamic behavior of the network device connection management system.
+In the Device Connection Management flow, a client sends a request to manage a device's connection. The operation could be either to connect or disconnect.
 
-1. The client initiates a connection management operation by sending a request to the `NorthboundComponent`.
-2. The `NorthboundComponent` retrieves the device details from the `DeviceManager`.
-3. Depending on the operation requested by the client, the `NorthboundComponent` then interacts with the `SouthboundComponent`.
+1. The client sends a `manageConnection` request to the `NorthboundComponent` specifying the operation ("connect" or "disconnect") and the `deviceId`.
+2. The `NorthboundComponent` requests the `DeviceManager` to get the device details associated with the `deviceId`.
+3. The `DeviceManager` returns the device details to the `NorthboundComponent`.
+4. Depending on the operation:
     - If the operation is "connect":
-        - The `NorthboundComponent` requests the `SouthboundComponent` to create a new session for the device.
-        - The `SouthboundComponent` creates a new `Session` and returns it to the `NorthboundComponent`.
-        - The `NorthboundComponent` sends a connection request to the `Session`.
-        - The `Session` requests the `SouthboundComponent` to establish a gNMI connection with the `NetworkDevice`.
-        - The `SouthboundComponent` establishes the connection and returns the response to the `Session`, which then returns it to the `NorthboundComponent`.
+        a. The `NorthboundComponent` requests the `SouthboundComponent` to connect to the device.
+        b. The `SouthboundComponent` requests the `DeviceConnectionManager` to create a session associated with the `deviceId`.
+        c. The `DeviceConnectionManager` creates a session and returns it to the `SouthboundComponent`.
+        d. The `SouthboundComponent` sends a `gNMI.performOperation` request to the `Session` specifying the `establishConnectionRequest`.
+        e. The `Session` sends a `gNMI.performOperation` request to the `NetworkDevice` to establish a connection.
+        f. The `NetworkDevice` returns a `gNMI.Response` to the `Session`.
+        g. The `Session` sends the response back to the `SouthboundComponent`.
+        h. The `DeviceConnectionManager` closes the session.
+        i. The `SouthboundComponent` returns the response to the `NorthboundComponent`.
     - If the operation is "disconnect":
-        - The `NorthboundComponent` requests the `SouthboundComponent` to retrieve the session associated with the device.
-        - The `SouthboundComponent` retrieves the `Session` and returns it to the `NorthboundComponent`.
-        - The `NorthboundComponent` sends a disconnection request to the `Session`.
-        - The `Session` requests the `SouthboundComponent` to terminate the gNMI connection with the `NetworkDevice`.
-        - The `SouthboundComponent` terminates the connection and returns the response to the `Session`, which then returns it to the `NorthboundComponent`.
+        a. The `NorthboundComponent` requests the `SouthboundComponent` to disconnect the device.
+        b. The `SouthboundComponent` requests the `DeviceConnectionManager` to create a session associated with the `deviceId`.
+        c. The `DeviceConnectionManager` creates a session and returns it to the `SouthboundComponent`.
+        d. The `SouthboundComponent` sends a `gNMI.performOperation` request to the `Session` specifying the `terminateConnectionRequest`.
+        e. The `Session` sends a `gNMI.performOperation` request to the `NetworkDevice` to terminate the connection.
+        f. The `NetworkDevice` returns a `gNMI.Response` to the `Session`.
+        g. The `Session` sends the response back to the `SouthboundComponent`.
+        h. The `DeviceConnectionManager` closes the session.
+        i. The `SouthboundComponent` returns the response to the `NorthboundComponent`.
+5. Finally, the `NorthboundComponent` returns the response to the client.
 
 
