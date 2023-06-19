@@ -102,13 +102,18 @@ The main objectives of the project are to develop a micro-service with two inter
 
 | ID | Descrizione | Priorità |
 | --------------- | ----------- | ---------- | 
-| 1.0 |  The microservice must have two interfaces: first; a northbound interface for receiving requests, managing subscriptions, and automatically receiving updates on configuration changes.The northbound interface should define input and output APIs for the microservice using Open-API and include a field for identifying the intended network element for each request.|M|
-| 2.0 |  Second; a southbound interface for forwarding or translating requests to their intended nodes.   |M|
-| 3.0 |  Both interfaces should support the following RPCs: Set, Get, Subscribe, and Capabilities. The Subscribe RPC should allow for streaming (continuous updates), polling (periodic updates), and once (single update) subscription types. Additionally, users should be able to initiate on-demand configuration polling.|M|
-| 4.0 |  Install, manipulate, and delete configuration of network devices |M|
-| 5.0 |  View operational data from network devices |M|
-| 6.0 |  Performant in terms of speed, memory and implementation; the transition time through this service should be matter of milliseconds, The memory footprints should be optimized and going through the list of devices,... should be quick. the service should be able to handle 100 requests per second for a node.|M|
-| 7.0 |  Stateless and scalable micro-service design. the service should be replicable without a problem.|M|
+|1.0|	The microservice must have a northbound and a southbound interface. |M|
+|2.0|	The northbound interface must be able to receive requests from users. |M|
+|3.0|	The northbound interface must include a field for identifying the intended network element for each request.|M|
+|4.0|	The northbound interface must manage subscriptions from users.|M|
+|5.0|	The northbound interface must automatically receive updates on configuration changes.|M|
+|6.0|	The northbound interface must define input and output APIs for the microservice using Open-API.|M|
+|7.0|	The southbound interface must forward and translate requests to their intended nodes.|M|
+|8.0|	The northbound and southbound interface should support the following RPCs: Set, Get, Subscribe, and Capabilities.|M|
+|9.0|	The Subscribe RPC in northbound interface should allow for streaming (continuous updates), polling (periodic updates), and once (single update) subscription types.|M|
+|10.0|	Users should be able to initiate on-demand configuration polling.|M|
+|11.0|	Network administrators have the ability to install, manipulate, and configure network devices through third parties|M|
+|12.0|	The service should be able to view operational data from network devices.|M|
 
 <a name="sp3.3"></a>
 ### 3.2 Non-Functional Requirements 
@@ -120,3 +125,7 @@ The main objectives of the project are to develop a micro-service with two inter
 | 3.0 | Authentication, authorization, and access control for nodes  |M|
 | 4.0 | Cloud-based platform compatibility with AWS |O|
 | 5.0 | Cloud-based platform compatibility with GCP |O|
+| 6.0 | The service should be performant in terms of time. The transition time through this service should be a matter of milliseconds.|M|
+| 7.0 | The service should be performant in terms of space. The memory footprints should be optimized.|M|
+| 8.0 | The service should be able to handle 100 requests per second for a node.|M|
+| 9.0 | The service should be stateless and scalable design. the service should be replicable without a problem.|M|
