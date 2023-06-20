@@ -17,6 +17,7 @@ Version | Data | Author(s)| Notes
 4 | 31/05/23 | MACIEJ BOGDALSKI <br> SOODEH BALANI | Modified dynamic models and relations between classes
 5 | 07/06/23 | MACIEJ BOGDALSKI <br> SOODEH BALANI | Revised concept of the session
 6 | 15/06/23 | MACIEJ BOGDALSKI <br> SOODEH BALANI | Two new dynamic models: Adding/Deleting Device and Session creation
+7 | 20/06/23 | MACIEJ BOGDALSKI <br> SOODEH BALANI | Correction made to Session Creation 
 
 ## Table of Content
 
@@ -198,18 +199,17 @@ This subsection presents structural diagrams for the system module, including cl
 The dynamic models section presents a series of sequence diagrams that depict the interactions between the system components during various operations, emphasizing the behavior and collaboration of objects over time.
 
 #### <a name="rdc"></a> 4.2.1 Retrieving device configuration
-![Retrieve Device Config](https://www.plantuml.com/plantuml/png/ZPD1RiCW44NtSmgMwS8zG1TL5DXaOHIL4r0pJL0JS06dwktBcCZ2hgLw2-__-VEnzp7fa8RR5NINV63yQj4bwFEXxMolNMBIXtHvzuCptDzwx_8zqv79mt662RpR3bljz1a30QATtIi_hDce0r-nuTuvx9BrhZRa2qUCCHEZopmnfcyVFelLc5KyrZjTVgBjz5LwCrwS941PcJMlj19xOMTCUVo7FGz1KuAT6NsEvebCx5qd91A8pYBH5asPjW9J4P2fPffG631O8yME-jYMWKW0mYa4VwIWJjPvOe2uPfeI2rm58MWoLIFYp1j-3HZJRXdgSLv70aL2AIYCR8_FV_QeEnGW1U4dkG7F56ImcTaluiJUkqYzrY8foiPRDPGBLDNIlm9L2YlFkqb0BqSiQShdjqMM5R17P_BV-Wi0)
+![Retrieve Device Config](https://www.plantuml.com/plantuml/png/ZPF1Ri8m44Jl-nK-qWFzW1ugXBbmY1NLN-36Mx04TXexIFtxUZ2DJ1e9hfitipEhU1EJ6T9uFf7fKXY4F3dsYVeyT9thZKz2XI4TFyFehGpdFdZECnE5skxli1rVNCUDyUR00u1TS_TTXt79Hc_bWeqCtdENNF2rePmvSeoPkBhSuhV7d-WwSrB1CkQj8YgLnFeTaSMRE73Azb_kC0u66rRskd9lNs3YBYOnI0ATHRkcQ4gm1HX5ALFhQKDXo7AD53lqVIu3I2BW225lAT1vcGT3uDRJbbXW1AcWoLHV4My_-7lac5RpKBTv7OaqXAr26DNiN__rgE1y-rQLD7_up3xsmSVwJj2GhXey56YKgKx_M82hWeMc_1hFoBA2DkmjNiel)
 1. The `Client` sends a `getConfiguration` request to the `NorthboundComponent`. The request includes the `deviceId` of the network device that the configuration is requested for.
 2. The `NorthboundComponent` contacts the `DeviceManager` to fetch the device details using the provided `deviceId`.
 3. Once the `DeviceManager` provides the device details, the `NorthboundComponent` sends a `getConfiguration` request to the `SouthboundComponent`.
 4. The `SouthboundComponent` interacts with the `DeviceConnectionManager` to get a `Session` with the device.
-5. After the `DeviceConnectionManager` returns the `Session`, the `SouthboundComponent` uses the `Session` to send a `getConfiguration` request. This request uses the gNMI protocol to communicate with the `NetworkDevice`.
-6. The `NetworkDevice` receives the gNMI request and sends the same request to the `PhysicalNode` using the gNMI protocol.
-7. The `PhysicalNode` retrieves the configuration details and sends them back to the `NetworkDevice` as a gNMI response.
-8. The `NetworkDevice` then forwards the gNMI response to the `Session`.
-9. The `Session` forwards the configuration response to the `SouthboundComponent`.
-10. The `SouthboundComponent` forwards the configuration response back to the `NorthboundComponent`.
-11. Finally, the `NorthboundComponent` sends the configuration response back to the `Client`.
+5. After the `DeviceConnectionManager` returns the `Session`, the `SouthboundComponent` uses the `Session` to send a `getConfiguration` request directly to the `PhysicalNode` using the gNMI protocol.
+6. The `PhysicalNode` retrieves the configuration details and sends them back to the `Session` as a gNMI response.
+7. The `Session` forwards the configuration response to the `SouthboundComponent`.
+8. The `SouthboundComponent` forwards the configuration response back to the `NorthboundComponent`.
+9. Finally, the `NorthboundComponent` sends the configuration response back to the `Client`.
+
 
 
 
@@ -217,7 +217,7 @@ The dynamic models section presents a series of sequence diagrams that depict th
 
 
 #### <a name="udc"></a> 4.2.2 Updating device configuration
-![Updating device configuration](https://www.plantuml.com/plantuml/png/dPD1JiCm44NtFeMNHI8SW0Mg6c-wI5Gr9p39q5gaTeYT8cxFZ3Egx68Mi9sy_-VFTxlrGSzXkOn2zy7DiXuDs20c79hUJDe6sRevd5_TOeVQNIPd0MVQotQtpp05LzD3ewq-mKo0QhBldLjADjskBjZKpbheWt4sDQpl7C5x9A9BdXZ2fvlVLwkOLV5vX_ENDxqUMpV43uTMYFLaMRtGIV9PUWYu_isSbbbJWiqGVVR3e-pJ-GDvcgiE4BiGf4OJrQ372SAw_IPEQ2n685NTDgwC6213s0yB-byeQbQGcaBLd8exAyR2UWM1LR8rqfWifzYrYuWTZl2nW0-R-v0yJpEXDZQjA4xRx9z-7FPhnmehKIG-j7yLeqIWgies7y5FplgiT-JY4Zwkp76OBYcgn7JS4pzp6KA2Nnen_YMMIOJ45ikc_-et)
+![Updating device configuration](https://www.plantuml.com/plantuml/png/dPD1RiCW44Ntd89bAjKzG1TL5BpnmiYAJq1XwY0vu1eSgRVlZ4qjaj9Dj-FtFsyWEOQevhXSHwPqz3CNemKNsOH3g-saNEJIp_7oxXTdXBzEtW7ELE3orDnXDToiXbOvDS1CGDtUVU_zKghfJw9G8xnpeAFrBYyK3uqG0X9hIzBlBb_1QZLARu3cdMHiMubNRwJCNtc0YFKVTbXcHISSp7faOvwvpkTFr6blAW856QCqbjGjTWmGDz4zdD6uE4Egsa_S66OWHr8VNS3_fEZc6AL9IYIhT2T5BK5U25RPgIjDPXcrj_OhuimPFXS8yV0ecUQv4sOfsKdIaMtpycknlzQXfyBOAlSJFaEOl0j0WZdNPpkKc3wjiBz04QBxey-4fHz9cKI87S4P-fjy0m00)
 This sequence diagram describes the dynamic behavior of the network device connection management system for setting the configuration of a network device:
 
 1. The client initiates the configuration setting operation by sending a `setConfiguration(deviceId, configuration)` request to the `NorthboundComponent`.
@@ -227,18 +227,17 @@ This sequence diagram describes the dynamic behavior of the network device conne
 5. The `SouthboundComponent` requests the `DeviceConnectionManager` to provide an active session for the device by invoking `getSession(deviceId)`.
 6. The `DeviceConnectionManager` provides a `Session` and returns it to the `SouthboundComponent`.
 7. The `SouthboundComponent` sends a `sendRequest(setConfigurationRequest)` request to the `Session`.
-8. The `Session` sends a `gNMI.setConfiguration(configuration)` request to the `NetworkDevice` using the gNMI protocol.
-9. The `NetworkDevice` sends a `gNMI.setConfiguration(configuration)` request to the `PhysicalNode`.
-10. The `PhysicalNode` applies the configuration and sends a `gNMI.Response` back to the `NetworkDevice`.
-11. The `NetworkDevice` forwards the response back to the `Session`.
-12. The `Session` sends the response back to the `SouthboundComponent`.
-13. The `SouthboundComponent` sends the response back to the `NorthboundComponent`.
-14. The `NorthboundComponent` sends the final response back to the client.
+8. The `Session` sends a `gNMI.setConfiguration(configuration)` request to the `PhysicalNode`.
+9. The `PhysicalNode` applies the configuration and sends a `gNMI.Response` back to the `Session`.
+10. The `Session` sends the response back to the `SouthboundComponent`.
+11. The `SouthboundComponent` sends the response back to the `NorthboundComponent`.
+12. The `NorthboundComponent` sends the final response back to the client.
+
 
 
 
 #### <a name="sm"></a> 4.2.3 Subscription management (create, update, delete)
-![Subscription management](https://www.plantuml.com/plantuml/png/vPN1Qjmm48RlUeeXfmt4VO12IeXzyS4cr4-WI9D4r9PSIKxfsrSZUOMrNIzi2wMGYp6PV_xvPlo7VN2UMxzC8-F26mlrg51xDeS_Ag5chZtqnlgtPxDeMPjfDZhKWJle7zj2rk2x4jXnpL_Hag3fYlfWbdCsmsDzngOsMgFmokYjONtYYCu5HNGfYT7_CFPRiegipRhUqzjFfmGVUoDZuQbdBAqCrHTQ2Jx352SEoxCJLit4S30pMavlTo2ZQIllm6qKhNunjpH3lNEFyJPyz93xuFuUReJ5KBnXG7MQrtHXt2lw17euMjy6HROALsH0oYe39Xs3yBAHPLiwQL2bQSKQ--pRaTHFCyc68EkLSZtt3cPD0AIjCe5B3Haq2xCv356cvLVylg3pXz-Xrqe9I0RKtZU4rdVjfp_Ubh81uK7S8Gv_xKUH0ZAgZdmXoo_AJjpdMsoaUVImgyoGGxxj9UcGpvi3ioicNSfDLAV_X8iDb6mS7Pv4M-A8_p3QN0iSYuzJV1BvtyGvWruPv-isB2DylSS7YQsMx24ywCVk5m00)
+![Subscription management](https://www.plantuml.com/plantuml/png/tPH1QiCm44NtFeN8Ae6u1oYaX2WRBsn2VG95cYG2Mt8bET3RLsEhmafJ5x8efPiGD4___naDtbh7ZElR9cFSQKDe8q6vhFE7aikEAKSgRTpbg7ibg6uxhNoTC4kgNP5WUxXA3YLJx0m6WNsPr6lTtvEfT_IE3DLA0NTIgwaWlL44Qpqng8JuXykxbPmrbHQ0vuSgoyQMIFw2aSapQGV5kZzQRcI77alTWM7uRqt4u5-8DR4Jeb0dlK8FUMKEXjvPuqYyHpORik06V76H4QoZtxxqTcTmOq_BJ-cL9wAKdr96aCnZm97pfm8cM9J5aNbgS4lRcCa-iSJxw8ao69A6b66StyIa603PF2QmuuKaA28JyNh0b7Y5jnwiMtuD7IffG1GOZ0uLPglAukdXTd4720hb8G_LwYHDoroIFP9rx70EhMEJuTbcOEJ2wo4Tzd7k0kuND1Pk5an00x-uO4nnQ9A99tCMVsQfGj07bkhd5l_18YcHRVqFVkG_0000)
 
 
 This sequence diagram describes the dynamic behavior of the network device subscription management system.
@@ -251,8 +250,7 @@ This sequence diagram describes the dynamic behavior of the network device subsc
      - The `SouthboundComponent` requests the `DeviceConnectionManager` to get an active session for the device.
      - The `DeviceConnectionManager` provides an active `Session` to the `SouthboundComponent`.
      - The `SouthboundComponent` uses the `Session` to send a subscription creation request.
-     - The `Session` forwards this request to the `NetworkDevice` using the gNMI protocol.
-     - The `NetworkDevice` passes the gNMI request to the `PhysicalNode` and receives a confirmation in response.
+     - The `Session` forwards this request directly to the `PhysicalNode` using the gNMI protocol and receives a confirmation in response.
      - The `Session` passes this confirmation back to the `SouthboundComponent`.
      - The `SouthboundComponent` passes the confirmation to the `NorthboundComponent`, which then sends it to the client.
    - If the operation is "delete":
@@ -260,47 +258,51 @@ This sequence diagram describes the dynamic behavior of the network device subsc
      - The `SouthboundComponent` requests the `DeviceConnectionManager` to get an active session for the device.
      - The `DeviceConnectionManager` provides an active `Session` to the `SouthboundComponent`.
      - The `SouthboundComponent` uses the `Session` to send a subscription cancellation request.
-     - The `Session` forwards this request to the `NetworkDevice` using the gNMI protocol.
-     - The `NetworkDevice` passes the gNMI request to the `PhysicalNode` and receives a confirmation in response.
+     - The `Session` forwards this request directly to the `PhysicalNode` using the gNMI protocol and receives a confirmation in response.
      - The `Session` passes this confirmation back to the `SouthboundComponent`.
      - The `SouthboundComponent` passes the confirmation to the `NorthboundComponent`, which then sends it to the client.
 
 
 
-#### <a name="add"></a> 4.2.4 Add/Delete Device
-![Add/Delete Device](https://www.plantuml.com/plantuml/png/rPD1Ri9034NtSmgBLIkL2rIYGYKR5aHSmSsOCkh4ZYQ6ghUlPn8GYKJ5jbld_M__hycwLqnwQgF3HYN19WPYTPqDGnCwP8LQaXu_vCH-8sqdJ3R37khtxGIhw1mQsY7Z9wKCLBkf3UctfAy1AmRLk7D__Eb3Wx4MNpxiQ-U6Es3vblV0AxJ5Tn0_IKS9DGY_W2-JBH_aERk5CogLqp0gN3bOhM21tYyS53-phNRcQgFHyjO7uEfa6I2Z-Oxg4O65WeoQO5-Re4bauql2ZJ2JeSAt6iiBcLvUjXXs2Ad54VGqHRDzIV0NQjHu-hN3-wp5fDZJh31FaPJcdGtJQGl-VcaFAUQjAQKsy3yfZhqphE33gvqhF4rUvjeK-OVx1G00)
 
-In the Add/Delete Device flow, a client sends a request to manage a device. The operation could be either to add or delete a device.
+#### <a name="add"></a> 4.2.4 Add/Delete Device
+![Add/Delete Device](https://www.plantuml.com/plantuml/png/jPB1JiCm44Jl_efLJo3H7q0ggeWlFQJ_iCHRi72yaRCjlu_N9WZd477fTVncF2FxE0ickOx1u22Se0kUefWfYtxm4qQ1CoVvUEDhT1sF4qVA6ivmVZqrcAMR7wZ7YE-K5B1z6qFonUcpOYN06bElW_sBni4pZCLUcGUUAA5uZa_WYdAA5txKelw6GgK11e5V3Wu7sA5pEmDwgB6spwbP-edycmEm96bLK5Hxs7yOj3iekb-kw3XUV1fBZNpag4KrkuxSOhK7XPbMYnm54bgFgcfRqssksdRSULPqHZ75wwEl7OwQXprcXtxBRm00)
+
+In the Add/Delete Device flow, a client sends a request to manage a device. The operation could be either to add or delete a device. Please note that the creation of physical connections is managed by sessions and isn't shown in this diagram.
 
 1. The client sends a `manageDevice` request to the `NorthboundComponent` specifying the operation ("add" or "delete") and either the `deviceInfo` or `deviceId`.
 2. The `NorthboundComponent` requests the `DeviceManager` to either add or delete the device.
 3. Depending on the operation:
     - If the operation is "add":
         a. The `NorthboundComponent` sends an `addDevice` request to the `DeviceManager` with the `deviceInfo`.
-        b. The `DeviceManager` adds the device to its registry.
-        c. The `NetworkDevice` communicates with the `PhysicalNode` to create a physical connection.
-        d. After receiving the confirmation from the `PhysicalNode`, the `NetworkDevice` returns the confirmation to the `DeviceManager`.
-        e. The `DeviceManager` then sends a confirmation back to the `NorthboundComponent`.
+        b. The `DeviceManager` initiates the creation of a new `NetworkDevice` instance using the provided `deviceInfo`.
+        c. The `NetworkDevice` confirms the successful creation to the `DeviceManager`.
     - If the operation is "delete":
         a. The `NorthboundComponent` sends a `deleteDevice` request to the `DeviceManager` with the `deviceId`.
-        b. The `DeviceManager` prepares to remove the device from its registry.
-        c. The `NetworkDevice` communicates with the `PhysicalNode` to terminate the physical connection.
-        d. After receiving the confirmation from the `PhysicalNode`, the `NetworkDevice` returns the confirmation to the `DeviceManager`.
-        e. The `DeviceManager` removes the device from its registry and sends a confirmation back to the `NorthboundComponent`.
+        b. The `DeviceManager` initiates the deletion of the `NetworkDevice` instance associated with the provided `deviceId`.
+        c. The `NetworkDevice` confirms the successful deletion to the `DeviceManager`.
 4. Finally, the `NorthboundComponent` returns the confirmation to the client.
 
 
 #### <a name="sc"></a> 4.2.5 Session Creation
-![Session Creation](https://www.plantuml.com/plantuml/png/VP4nRiGW44LxJa6vAVO2AQ9LS8eKkmqdO64KezY31TY-VZx43g99PSdpvltvufQoYNcT9x7WwwrV36Ufmvh7PrZPgJ0lWGd_J9BwNNNOG9ktf08psUm3tmsRBue57TIzDr9A8Agb6pmexo5-_whA-348WI1vVIiI-Ifj99Ff45nS1J_TYp38t32fMQAmMD5OODhbFxY67oY2m1BwFoUVnjRYqjXw3BZhOMwG_3WNoGb7tGBiv_5_lLKfqQFwE1ei-ZOMJ5VjHkpA0_q0)
+![Session Creation](https://www.plantuml.com/plantuml/png/xPF1JiCm38RlUGeVjyDUO5BHe9jWXrKLVO8iCLj4vfGwdU3jYKlAj6f873XogA8wt__xJvskEEekzYUlshGwurfD4PhGn-C-z6JBS6e3OQffXkQXlCBMU7O6oq249hf0EqtwW9sWwt9txOZCYHXSb3OnT50VFzWPxQjWKUfrfPJs4Qe0zydkZD-YbqG_fWBbZbkh043YmE9EMi4I3XWpFhCPcW-K5YyTKJWfo7gHcGxJtYrb1XCfVPPZc677ujHr3DCaaf7iCxxro76M7httZe-NhvIt9kcQBnVngAjaCXN-VB34oxl85Zd1HRCPRT3cv5DPCvxnjxf6eMUSpcZpxZZodu_gzWJ-9q1M5GNKsBbWdO6dq3E-8hQE3b0KwlgE-y2ufK4-NdMUpTKAoSgV_ma0)
 
-In the Session Creation flow, a session is established with a network device for further interaction.
+This sequence diagram describes the behavior of the session management system when interacting with a network device:
 
-1. The process begins with the `SouthboundComponent` sending a `createSession` request to the `DeviceConnectionManager`, specifying the `deviceId`.
-2. The `DeviceConnectionManager` initiates the process of creating a new `Session` by passing the `deviceId` to the `Session`.
-3. The `Session` sends an `establishConnection` request to the `NetworkDevice`.
-4. Upon successful connection, the `NetworkDevice` returns a `Connection Established` confirmation to the `Session`.
-5. The `Session` sends a `Session Created` confirmation to the `DeviceConnectionManager`.
-6. Finally, the `DeviceConnectionManager` returns the newly created session to the `SouthboundComponent`.
+1. In the scenario where no active session exists for a specific `deviceId`, the `SouthboundComponent` sends a `getSession(deviceId)` request to the `DeviceConnectionManager`. Recognizing that there's no active session for the provided `deviceId`, the `DeviceConnectionManager` internally invokes `createSession(deviceId)` to start a new session. Once the session is created, it returns the new session to the `SouthboundComponent`.
+2. The `SouthboundComponent` then sends a `sendRequest(establishConnectionRequest)` to the newly created session.
+3. The session then sends an `establishConnection(deviceId)` request to the `PhysicalNode`.
+4. The `PhysicalNode` acknowledges the connection establishment by returning a `ConnectionEstablished` response back to the Session.
+5. The Session forwards this response back to the `SouthboundComponent` to inform it that the connection with the `PhysicalNode` has been successfully established.
+
+In case an active session already exists for a `deviceId`, the flow is slightly different:
+
+1. When the `SouthboundComponent` sends a `getSession(deviceId)` request to the `DeviceConnectionManager`, it returns the existing active session for the `deviceId`.
+2. The `SouthboundComponent` then sends a `sendRequest(establishConnectionRequest)` to the existing session.
+3. The session sends an `establishConnection(deviceId)` request to the `PhysicalNode` and forwards the `ConnectionEstablished` response back to the `SouthboundComponent`, as in the previous scenario.
+
+Lastly, as a part of periodic housekeeping, the `DeviceConnectionManager` can decide to close inactive sessions by invoking the `closeInactiveSessions()` operation.
+
 
 
 
