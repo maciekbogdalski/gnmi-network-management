@@ -18,6 +18,7 @@ Version | Data | Author(s)| Notes
 5 | 07/06/23 | MACIEJ BOGDALSKI <br> SOODEH BALANI | Revised concept of the session
 6 | 15/06/23 | MACIEJ BOGDALSKI <br> SOODEH BALANI | Two new dynamic models: Adding/Deleting Device and Session creation
 7 | 20/06/23 | MACIEJ BOGDALSKI <br> SOODEH BALANI | Correction made to Session Creation 
+8 | 24/06/23 | MACIEJ BOGDALSKI <br> SOODEH BALANI | Correction made to Session Creation
 
 ## Table of Content
 
@@ -285,23 +286,16 @@ In the Add/Delete Device flow, a client sends a request to manage a device. The 
 
 
 #### <a name="sc"></a> 4.2.5 Session Creation
-![Session Creation](https://www.plantuml.com/plantuml/png/xPF1JiCm38RlUGeVjyDUO5BHe9jWXrKLVO8iCLj4vfGwdU3jYKlAj6f873XogA8wt__xJvskEEekzYUlshGwurfD4PhGn-C-z6JBS6e3OQffXkQXlCBMU7O6oq249hf0EqtwW9sWwt9txOZCYHXSb3OnT50VFzWPxQjWKUfrfPJs4Qe0zydkZD-YbqG_fWBbZbkh043YmE9EMi4I3XWpFhCPcW-K5YyTKJWfo7gHcGxJtYrb1XCfVPPZc677ujHr3DCaaf7iCxxro76M7httZe-NhvIt9kcQBnVngAjaCXN-VB34oxl85Zd1HRCPRT3cv5DPCvxnjxf6eMUSpcZpxZZodu_gzWJ-9q1M5GNKsBbWdO6dq3E-8hQE3b0KwlgE-y2ufK4-NdMUpTKAoSgV_ma0)
+![Session Creation](https://www.plantuml.com/plantuml/png/hPB1QeGm48RlUOevjeTz0GzbMrrA3ok2Jp2RJDT0DX5dbFRjcn6jM4gXi1S3lz__p_mXHnOSPBm5q-VJMzzZ56ZJADqbZT6LwTQdI5b3XlQbt64LJTvIcM8aApx5CqQyqg1eLPxtYSISYJd5e9KqGDDzihSOwkH8zQOs1eD0dU0vnqtqRNhFz6iMuZBnpHa0q7NWyAIZe80hoO8_k0Lwd2dKB1HIJWKzrTOMO0T2eTzjBHmorDG540jUWkTkAxgorSncIc5Dt93JwYAtvUdiFw1rDIrMhEtd7uvsDIWm_RoaquTduRlUrJyMYiuSyqSVqXS0)
 
-This sequence diagram describes the behavior of the session management system when interacting with a network device:
+This sequence diagram depicts the session management system's behavior during interaction with a network device:
 
-1. In the scenario where no active session exists for a specific `deviceId`, the `SouthboundComponent` sends a `getSession(deviceId)` request to the `DeviceConnectionManager`. Recognizing that there's no active session for the provided `deviceId`, the `DeviceConnectionManager` internally invokes `createSession(deviceId)` to start a new session. Once the session is created, it returns the new session to the `SouthboundComponent`.
-2. The `SouthboundComponent` then sends a `sendRequest(establishConnectionRequest)` to the newly created session.
-3. The session then sends an `establishConnection(deviceId)` request to the `PhysicalNode`.
-4. The `PhysicalNode` acknowledges the connection establishment by returning a `ConnectionEstablished` response back to the Session.
-5. The Session forwards this response back to the `SouthboundComponent` to inform it that the connection with the `PhysicalNode` has been successfully established.
+1. **No Active Session for a Specific `deviceId`**: When there's no active session for a specific `deviceId`, the `SouthboundComponent` (SBC) sends a `getSession(deviceId)` request to the `DeviceConnectionManager` (DCM). Identifying the absence of an active session for the provided `deviceId`, the DCM internally triggers `createSession(deviceId)`, initializing a new session. The new session initiates a connection to the `PhysicalNode` (PN) by sending an `establishConnection(deviceId)` request. Upon successful connection establishment, the PN sends a `ConnectionEstablished` response back to the session, which in turn communicates this status back to the DCM. Once DCM is informed about the successful connection, it returns the Session to the SBC.
 
-In case an active session already exists for a `deviceId`, the flow is slightly different:
+2. **Existing Active Session for a Given `deviceId`**: In the case where an active session already exists for a `deviceId`, the workflow is simplified. The SBC sends a `getSession(deviceId)` request to the DCM, and since an active session for the `deviceId` is available, the DCM directly returns the existing Session to the SBC.
 
-1. When the `SouthboundComponent` sends a `getSession(deviceId)` request to the `DeviceConnectionManager`, it returns the existing active session for the `deviceId`.
-2. The `SouthboundComponent` then sends a `sendRequest(establishConnectionRequest)` to the existing session.
-3. The session sends an `establishConnection(deviceId)` request to the `PhysicalNode` and forwards the `ConnectionEstablished` response back to the `SouthboundComponent`, as in the previous scenario.
+Lastly, the `DeviceConnectionManager` conducts periodic housekeeping as a part of its regular operations, which includes closing inactive sessions by invoking the `closeInactiveSessions()` operation.
 
-Lastly, as a part of periodic housekeeping, the `DeviceConnectionManager` can decide to close inactive sessions by invoking the `closeInactiveSessions()` operation.
 
 
 
