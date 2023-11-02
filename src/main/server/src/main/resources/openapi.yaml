@@ -1,0 +1,139 @@
+openapi: 3.0.0
+info:
+  description: API for interacting with the Northbound component of the network device
+    management system.
+  title: Northbound API
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /configuration:
+    get:
+      parameters:
+      - description: ID of the device to retrieve configuration for.
+        explode: true
+        in: query
+        name: deviceId
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_configuration_get_200_response'
+          description: Device configuration retrieved successfully.
+      summary: Get device configuration
+      x-accepts: application/json
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_configuration_post_request'
+        required: true
+      responses:
+        "200":
+          description: Device configuration set successfully.
+      summary: Set device configuration
+      x-content-type: application/json
+      x-accepts: application/json
+  /device:
+    delete:
+      parameters:
+      - description: ID of the device to remove.
+        explode: true
+        in: query
+        name: deviceId
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          description: Device removed successfully.
+      summary: Remove a device
+      x-accepts: application/json
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_device_post_request'
+        required: true
+      responses:
+        "201":
+          description: Device added successfully.
+      summary: Add a new device
+      x-content-type: application/json
+      x-accepts: application/json
+  /subscription:
+    delete:
+      parameters:
+      - description: ID of the subscription to cancel.
+        explode: true
+        in: query
+        name: subscriptionId
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          description: Subscription canceled successfully.
+      summary: Cancel a subscription
+      x-accepts: application/json
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_subscription_post_request'
+        required: true
+      responses:
+        "201":
+          description: Subscription created successfully.
+      summary: Create a new subscription
+      x-content-type: application/json
+      x-accepts: application/json
+components:
+  schemas:
+    _subscription_post_request:
+      properties:
+        deviceId:
+          type: string
+        subscriptionType:
+          type: string
+        pollingInterval:
+          type: integer
+      type: object
+    _configuration_post_request:
+      properties:
+        deviceId:
+          type: string
+        configuration:
+          type: string
+      type: object
+    _configuration_get_200_response:
+      example:
+        configuration: configuration
+      properties:
+        configuration:
+          type: string
+      type: object
+    _device_post_request:
+      properties:
+        deviceId:
+          type: string
+        deviceType:
+          type: string
+        initialConfiguration:
+          type: string
+        address: # Add this
+          type: string
+        port: # Add this
+          type: integer
+      type: object
+

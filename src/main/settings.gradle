@@ -1,0 +1,6 @@
+rootProject.name = 'NetworkDeviceManagementSystem'
+include ':northbound-component'
+include 'southbound-component'
+include 'common'
+include ':server'
+include ':gNMI_microservice'
