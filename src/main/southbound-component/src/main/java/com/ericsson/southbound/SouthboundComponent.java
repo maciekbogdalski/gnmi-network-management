@@ -1,14 +1,15 @@
 package com.ericsson.southbound;
 
 import com.ericsson.networking.common.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 @Component
 public class SouthboundComponent {
+    private static final Logger logger = LoggerFactory.getLogger(SouthboundComponent.class);
+
 
     private DeviceConnectionManager deviceConnectionManager;
 
@@ -17,10 +18,18 @@ public class SouthboundComponent {
     }
 
     public Configuration getConfiguration(String address, int port) {
-        // Get the session for the device using address and port
+        logger.debug("SouthboundComponent: Getting configuration for address {}, port {}", address, port);
         Session session = getOrCreateSession(address, port);
-        // Adjust the sendRequest method call to return a Configuration object
-        return (Configuration) session.sendRequest("getConfiguration", null);
+
+        // Assuming the device's session knows how to handle a "getConfiguration" request
+        // The sendRequest method should return an object of type Configuration
+        Configuration configuration = (Configuration) session.sendRequest("getConfiguration", null);
+        if (configuration == null) {
+            logger.error("Failed to retrieve configuration for device at address {}, port {}", address, port);
+            throw new IllegalStateException("Configuration could not be retrieved.");
+        }
+
+        return configuration;
     }
 
     public void setConfiguration(String address, int port, Configuration configuration) {
@@ -29,8 +38,6 @@ public class SouthboundComponent {
         // Adjust the sendRequest method call to accept a Configuration object directly
         session.sendRequest("setConfiguration", configuration);
     }
-
-
 
     public void createSubscription(String address, int port, Object subscriptionInfo) {
         Session session = getOrCreateSession(address, port);

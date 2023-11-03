@@ -6,7 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.ericsson.networkdevice.DeviceManager;
 import com.ericsson.networking.common.NetworkDevice;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Objects;
 
 @RestController
@@ -17,30 +18,30 @@ public class DeviceApiController implements DeviceApi {
     private final DeviceManager deviceManager;
 
     public DeviceApiController(DeviceManager deviceManager) {
-        this.deviceManager = Objects.requireNonNull(deviceManager);
+        this.deviceManager = Objects.requireNonNull(deviceManager, "DeviceManager cannot be null");
     }
 
     @Override
-    public ResponseEntity<Void> deviceDelete(String deviceId) {
+    public ResponseEntity<Void> deviceDelete(String address, int port) {
         try {
-            deviceManager.removeDevice(deviceId);
-            log.info("Device with ID {} removed successfully.", deviceId);
+            deviceManager.removeDevice(address, port);
+            log.info("Device with address {} and port {} removed successfully.", address, port);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            log.error("Error removing device with ID {}: {}", deviceId, e.getMessage());
+            log.error("Error removing device with address {} and port {}: {}", address, port, e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public ResponseEntity<Void> devicePost(String deviceId) {
+    public ResponseEntity<Void> devicePost(String address, int port) {
         try {
-            NetworkDevice device = new NetworkDevice(deviceId); // Assuming NetworkDevice has a constructor that accepts deviceId
+            NetworkDevice device = new NetworkDevice(address, port); // Update constructor if necessary
             deviceManager.addDevice(device);
-            log.info("Device added successfully.");
+            log.info("Device with address {} and port {} added successfully.", address, port);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
-            log.error("Error adding device: {}", e.getMessage());
+            log.error("Error adding device with address {} and port {}: {}", address, port, e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -3,22 +3,19 @@ import com.ericsson.networkdevice.dto.DeviceManagementDTO;
 import com.ericsson.networkdevice.dto.SubscriptionManagementDTO;
 import com.ericsson.networkdevice.dto.CapabilityResponseDTO;
 import com.ericsson.networkdevice.gnmi.GnmiService;
-import com.github.gnmi.proto.GetResponse;
+import com.ericsson.networking.common.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.github.gnmi.proto.CapabilityRequest;
 import com.github.gnmi.proto.CapabilityResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import com.github.gnmi.proto.Encoding;
 import com.ericsson.networkdevice.dto.Confirmation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 
 @RestController
@@ -29,7 +26,10 @@ public class GnmiController {
     private final GnmiService gnmiService;
 
     private final NorthboundComponent northboundComponent;
-    private static final Logger logger = LoggerFactory.getLogger(GnmiController.class);
+    public static final Logger logger = LoggerFactory.getLogger(GnmiController.class);
+    private boolean isConfigurationEmpty(Configuration configuration) {
+        return configuration.getConfigEntries().isEmpty();
+    }
 
 
 
@@ -64,18 +64,6 @@ public class GnmiController {
         return dto;
     }
 
-
-//    @PostMapping("/getData")
-//    public GetResponse getGnmiData(@RequestBody Map<String, String> requestBody) {
-//        String path = requestBody.get("path");
-//        return gnmiService.getGnmiData(path);
-//    }
-
-//    @PostMapping("/getData")
-//    public ResponseEntity<String> getGnmiData(@RequestBody Map<String, String> requestBody) {
-//        logger.info("Received /getData request");
-//        return ResponseEntity.ok("GNMI Data endpoint reached successfully.");
-//    }
 
     @GetMapping("/test")
     public String testEndpoint() {
@@ -136,5 +124,47 @@ public class GnmiController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @GetMapping("/verifyDevice/{address}/{port}")
+    public ResponseEntity<String> verifyDevice(@PathVariable String address, @PathVariable int port) {
+        boolean deviceExists = northboundComponent.isDevicePresent(address, port);
+        if (deviceExists) {
+            return ResponseEntity.ok("Success!");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Device not found.");
+        }
+    }
+
+    @GetMapping("/deviceConfiguration/{address}/{port}")
+    public ResponseEntity<String> getDeviceConfiguration(@PathVariable String address, @PathVariable int port) {
+        String configuration = northboundComponent.getDeviceConfiguration(address, port);
+        if (configuration != null) {
+            return ResponseEntity.ok(configuration);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Configuration not found for device.");
+        }
+    }
+
+    @PostMapping("/configuration/{address}/{port}")
+    public ResponseEntity<String> updateDeviceConfiguration(@PathVariable String address, @PathVariable int port, @RequestBody String newConfiguration) {
+        try {
+            northboundComponent.updateConfiguration(address, port, newConfiguration);
+            return ResponseEntity.ok("Configuration updated successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating configuration: " + e.getMessage());
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 
 }

@@ -8,14 +8,22 @@ public class NetworkDevice {
     private String address;
     private int port;
 
-    private final String deviceId;
+    private String deviceId;
     private String configuration;  // Assuming configuration is a string. Adjust as needed.
 
-    public NetworkDevice(String deviceId) {
-        if (deviceId == null || deviceId.trim().isEmpty()) {
-            throw new IllegalArgumentException("Device ID cannot be null or empty.");
+    public NetworkDevice(String address, int port) {
+        if (address == null || address.trim().isEmpty()) {
+            throw new IllegalArgumentException("Address cannot be null or empty.");
         }
-        this.deviceId = deviceId;
+        if (port <= 0) {
+            throw new IllegalArgumentException("Port must be positive.");
+        }
+        this.address = address;
+        this.port = port;
+    }
+    // Existing constructor can be removed if not needed or kept if you have devices identified by a deviceId.
+    public NetworkDevice(String deviceId) {
+        // ... existing constructor code ...
     }
 
     public String getDeviceId() {

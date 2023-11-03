@@ -9,15 +9,9 @@ import com.github.gnmi.proto.GetResponse;
 import org.springframework.stereotype.Service;
 import com.github.gnmi.proto.CapabilityRequest;
 import com.github.gnmi.proto.CapabilityResponse;
-
-import org.slf4j.Logger;  // <-- Import the Logger class
-import org.slf4j.LoggerFactory;  // <-- Import the LoggerFactory class
-
-import java.util.ArrayList;
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class GnmiService {
@@ -61,8 +55,6 @@ public class GnmiService {
         }
     }
 
-
-
     public CapabilityResponse getCapabilities() {
         CapabilityRequest request = CapabilityRequest.newBuilder().build();
         try {
@@ -76,15 +68,42 @@ public class GnmiService {
         }
     }
 
-    // Somewhere in your package, define the custom exception:
     public class CapabilitiesFetchException extends RuntimeException {
         public CapabilitiesFetchException(String message, Throwable cause) {
             super(message, cause);
         }
     }
 
+    public GetResponse getDeviceConfiguration(String deviceId) {
+        // Validate the deviceId input
+        if (deviceId == null || deviceId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Device ID cannot be null or empty");
+        }
 
+        // Build the GNMI Path for the device configuration
+        // Assuming the path for configuration is in the format: /devices/{deviceId}/config
+        com.github.gnmi.proto.Path.Builder pathBuilder = com.github.gnmi.proto.Path.newBuilder()
+                .addElem(com.github.gnmi.proto.PathElem.newBuilder().setName("devices").build())
+                .addElem(com.github.gnmi.proto.PathElem.newBuilder().setName(deviceId).build())
+                .addElem(com.github.gnmi.proto.PathElem.newBuilder().setName("config").build());
 
+        // Construct the GNMI GetRequest
+        GetRequest request = GetRequest.newBuilder()
+                .addPath(pathBuilder.build())
+                .setType(com.github.gnmi.proto.GetRequest.DataType.ALL) // Assuming we want all data
+                .setEncoding(com.github.gnmi.proto.Encoding.JSON) // Assuming JSON encoding
+                .build();
+
+        logger.info("Constructed GNMI GetRequest for Device Configuration: {}", request);
+
+        // Execute GNMI call with a deadline
+        try {
+            return gnmiClient.withDeadlineAfter(10, TimeUnit.SECONDS).get(request);
+        } catch (StatusRuntimeException e) {
+            logger.error("gRPC call failed for getDeviceConfiguration", e);
+            throw new RuntimeException("gRPC call failed for getDeviceConfiguration", e);
+        }
+    }
 
     public void shutdown() {
         logger.info("Shutting down the gNMI service.");  // <-- Log the shutdown process

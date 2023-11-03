@@ -52,11 +52,11 @@ public interface DeviceApi {
     )
     @RequestMapping(
             method = RequestMethod.DELETE,
-            value = "/device"
+            value = "/device/{address}/{port}"
     )
     ResponseEntity<Void> deviceDelete(
-            @NotNull @Parameter(name = "deviceId", description = "ID of the device to remove.", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "deviceId", required = true) String deviceId
-    );
+            @Parameter(name = "address", description = "IP address of the device to remove.", required = true, in = ParameterIn.PATH) @PathVariable(value = "address") String address,
+            @Parameter(name = "port", description = "Port of the device to remove.", required = true, in = ParameterIn.PATH) @PathVariable(value = "port") int port );
 
     @Operation(
             operationId = "devicePost",
@@ -67,10 +67,11 @@ public interface DeviceApi {
     )
     @RequestMapping(
             method = RequestMethod.POST,
-            value = "/device",
+            value = "/device/{address}/{port}",
             consumes = { "application/json" }
     )
     ResponseEntity<Void> devicePost(
-            @Parameter(name = "deviceId", description = "ID of the device to add.", required = true) @Valid @RequestBody String deviceId
+            @Parameter(name = "address", description = "IP address of the device to add.", required = true, in = ParameterIn.PATH) @PathVariable(value = "address") String address,
+            @Parameter(name = "port", description = "Port of the device to add.", required = true, in = ParameterIn.PATH) @PathVariable(value = "port") int port
     );
 }

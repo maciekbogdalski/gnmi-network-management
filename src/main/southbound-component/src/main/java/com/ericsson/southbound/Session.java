@@ -1,11 +1,16 @@
 package com.ericsson.southbound;
 import com.ericsson.networking.common.Configuration;
+import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Session {
+    private static final Logger logger = LoggerFactory.getLogger(Session.class);
+
 
     private final String address;
     private final int port;
@@ -40,6 +45,7 @@ public class Session {
     public Configuration sendRequest(String requestType, Object data) throws IllegalArgumentException, UnsupportedOperationException {
         switch (requestType) {
             case "getConfiguration":
+                logger.debug("Session: Handling getConfiguration request.");
                 return new Configuration(simulatedDeviceStore);
 
             case "setConfiguration":
@@ -64,6 +70,8 @@ public class Session {
                 throw new UnsupportedOperationException("Unknown request type: " + requestType);
         }
     }
+
+
 
 
 }

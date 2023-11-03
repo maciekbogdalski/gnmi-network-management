@@ -4,10 +4,10 @@ import com.ericsson.networkdevice.dto.Confirmation;
 import com.ericsson.networkdevice.dto.DeviceManagementDTO;
 import com.ericsson.networkdevice.dto.SubscriptionManagementDTO;
 import com.ericsson.networking.common.NetworkDevice;
-import com.ericsson.networking.common.Configuration;
 import com.ericsson.southbound.SouthboundComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class NorthboundComponent {
@@ -46,6 +46,11 @@ public class NorthboundComponent {
         return confirmation;
     }
 
+    public boolean isDevicePresent(String address, int port) {
+        return deviceManager.getDevice(address, port) != null;
+    }
+
+
 
     public Confirmation manageSubscriptionWithConfirmation(String operation, SubscriptionManagementDTO subscriptionDTO) {
         manageSubscription(operation, subscriptionDTO);
@@ -71,22 +76,18 @@ public class NorthboundComponent {
     }
 
 
-    public Configuration getConfiguration(String address, int port) {
-        NetworkDevice device = deviceManager.getDevice(address, port);
-        if (device == null) {
-            throw new IllegalArgumentException("Device not found with IP: " + address + " and port: " + port);
-        }
-        return southboundComponent.getConfiguration(address, port); // Adjusted method call
+    public String getDeviceConfiguration(String address, int port) {
+        return deviceManager.getDeviceConfiguration(address, port);
     }
 
-    public void setConfiguration(String address, int port, Configuration configuration) {
+    public void updateConfiguration(String address, int port, String newConfiguration) {
+        // Validate input, handle exceptions as needed
         NetworkDevice device = deviceManager.getDevice(address, port);
         if (device == null) {
-            throw new IllegalArgumentException("Device not found with IP: " + address + " and port: " + port);
+            throw new IllegalArgumentException("Device not found.");
         }
-        southboundComponent.setConfiguration(address, port, configuration); // Adjusted method call
+        device.setConfiguration(newConfiguration);
+        // If there is any additional logic to handle after setting configuration, add it here.
     }
-
-    // ... any additional methods required by the NorthboundComponent ...
 
 }

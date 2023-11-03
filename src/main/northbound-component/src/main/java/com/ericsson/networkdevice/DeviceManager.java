@@ -1,16 +1,14 @@
 package com.ericsson.networkdevice;
-
 import com.ericsson.networking.common.NetworkDevice;
 import org.springframework.stereotype.Service;
-
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @Service
 public class DeviceManager {
 
     private final Map<String, NetworkDevice> devices = new ConcurrentHashMap<>();
-
     private String createDeviceKey(String address, int port) {
         return address + ":" + port; // Create a composite key based on IP address and port
     }
@@ -30,7 +28,6 @@ public class DeviceManager {
         return devices.get(key);
     }
 
-    // Methods for device configuration might use the IP and port to identify the device
     public String getDeviceConfiguration(String address, int port) {
         NetworkDevice device = getDevice(address, port);
         return device != null ? device.getConfiguration() : null;
