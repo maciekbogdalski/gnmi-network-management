@@ -67,4 +67,4 @@ The JAR file will be generated in the `build/libs` directory.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [src/LICENSE.md](LICENSE.md) file for details.
