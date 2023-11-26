@@ -27,8 +27,8 @@ Follow these instructions to set up the project on your local machine for develo
 
 You need to have the following installed:
 
-- Java JDK 11 or newer
-- Gradle (compatible with the Gradle version used in the project)
+- Java JDK 17 or newer
+- Gradle 7.3
 - Docker (for running gNMI server instances)
 
 
