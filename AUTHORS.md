@@ -4,8 +4,6 @@ This file lists all the individuals who have contributed to the GNMI Microservic
 
 ## Core Contributors
 
-- **[Maciej Michal Bogdalski]** - *Initial work* - [maciekbogdalski](https://github.com/maciekbogdalski)
-- **[Soodeh Bakrani Balani]** - *Initial work* - [Soodehb0](https://github.com/Soodehb0)
-
-## Acknowledgments
+- **[Maciej Michal Bogdalski]**  - [maciekbogdalski](https://github.com/maciekbogdalski)
+- **[Soodeh Bakrani Balani]** - [Soodehb0](https://github.com/Soodehb0)
 
