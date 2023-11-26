@@ -23,4 +23,4 @@ Run the build command with Gradle:
 
 This command compiles the Java source files, runs any tests, and generates the build artifacts necessary for installation.
 
-Upon successful compilation, the build artifacts will be available in the build/libs directory.
+Upon successful compilation, the build artifacts will be available in the `build/libs` directory.
