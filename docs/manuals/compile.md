@@ -5,7 +5,7 @@ This document provides instructions on how to compile the GNMI Microservice for 
 ## Prerequisites
 
 - Java JDK 17 or newer
-- Gradle (ensure the version is compatible with the project)
+- Gradle 7.3
 
 ## Compiling the Project
 
