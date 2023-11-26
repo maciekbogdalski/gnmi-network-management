@@ -12,6 +12,7 @@ import com.github.gnmi.proto.CapabilityResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
+import io.grpc.ManagedChannelBuilder;
 
 @Service
 public class GnmiService {
@@ -55,16 +56,39 @@ public class GnmiService {
         }
     }
 
-    public CapabilityResponse getCapabilities() {
-        CapabilityRequest request = CapabilityRequest.newBuilder().build();
+    // Method to create a new gRPC channel to a given address and port
+    private gNMIGrpc.gNMIBlockingStub createGnmiClient(String address, int port) {
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(address, port)
+                .usePlaintext()
+                .build();
+        return gNMIGrpc.newBlockingStub(channel);
+    }
+
+    public CapabilityResponse getCapabilities(String address, int port) {
+        ManagedChannel channel = null;
         try {
-            CapabilityResponse response = gnmiClient.capabilities(request);
-            logger.info("Fetched capabilities: {}", response.toString());
-            return response;
+            channel = ManagedChannelBuilder.forAddress(address, port)
+                    .usePlaintext()
+                    .build();
+            gNMIGrpc.gNMIBlockingStub gnmiClient = gNMIGrpc.newBlockingStub(channel);
+            CapabilityRequest request = CapabilityRequest.newBuilder().build();
+
+            // Fetch capabilities
+            return gnmiClient.capabilities(request);
         } catch (Exception e) {
-            logger.error("Failed to fetch capabilities", e);
-            // Rethrow as a custom exception
-            throw new CapabilitiesFetchException("Failed to fetch capabilities", e);
+            logger.error("Failed to fetch capabilities from {}:{}", address, port, e);
+            throw new RuntimeException("Failed to fetch capabilities", e);
+        } finally {
+            // Close the channel when you're done with it
+            if (channel != null) {
+                channel.shutdown();
+                try {
+                    // Wait for the channel to terminate
+                    channel.awaitTermination(5, TimeUnit.SECONDS);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
+            }
         }
     }
 

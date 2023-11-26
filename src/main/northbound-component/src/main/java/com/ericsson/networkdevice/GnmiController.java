@@ -40,26 +40,18 @@ public class GnmiController {
         this.northboundComponent = northboundComponent;
     }
 
-    @GetMapping("/capabilities")
-    public CapabilityResponseDTO getCapabilities() {
-        CapabilityResponse capabilityResponse = gnmiService.getCapabilities();
+    @GetMapping("/capabilities/{address}/{port}")
+    public CapabilityResponseDTO getCapabilities(@PathVariable String address, @PathVariable int port) {
+        CapabilityResponse capabilityResponse = gnmiService.getCapabilities(address, port);
 
         CapabilityResponseDTO dto = new CapabilityResponseDTO();
-
-        // Assuming there's a correct method to get the gNMI version:
         dto.setGNMIVersion(capabilityResponse.getGNMIVersion());
-
-        // Convert ModelData list to a list of strings:
-        List<String> supportedModels = capabilityResponse.getSupportedModelsList().stream()
-                .map(modelData -> modelData.getName() + ":" + modelData.getVersion())  // Assuming name and version representation
-                .collect(Collectors.toList());
-        dto.setSupportedModels(supportedModels);
-
-        // Convert Encoding enum list to a list of strings:
-        List<String> supportedEncodings = capabilityResponse.getSupportedEncodingsList().stream()
+        dto.setSupportedModels(capabilityResponse.getSupportedModelsList().stream()
+                .map(modelData -> modelData.getName() + ":" + modelData.getVersion())
+                .collect(Collectors.toList()));
+        dto.setSupportedEncodings(capabilityResponse.getSupportedEncodingsList().stream()
                 .map(Encoding::name)
-                .collect(Collectors.toList());
-        dto.setSupportedEncodings(supportedEncodings);
+                .collect(Collectors.toList()));
 
         return dto;
     }
@@ -73,8 +65,8 @@ public class GnmiController {
     @PostMapping("/device")
     public ResponseEntity<String> manageDevice(@RequestBody DeviceManagementDTO deviceDTO) {
         try {
-            northboundComponent.manageDevice("add", deviceDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Device added successfully.");
+            Confirmation confirmation = northboundComponent.manageDevice("add", deviceDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(confirmation.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -83,8 +75,8 @@ public class GnmiController {
     @DeleteMapping("/device")
     public ResponseEntity<String> removeDevice(@RequestBody DeviceManagementDTO deviceDTO) {
         try {
-            northboundComponent.manageDevice("delete", deviceDTO);
-            return ResponseEntity.ok("Device removed successfully.");
+            Confirmation confirmation = northboundComponent.manageDevice("delete", deviceDTO);
+            return ResponseEntity.ok(confirmation.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

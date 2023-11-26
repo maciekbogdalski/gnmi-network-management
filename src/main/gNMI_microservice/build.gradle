@@ -7,6 +7,19 @@ group = 'com.gnmi'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11' // or your Java version
 
+tasks.named('bootRun').configure {
+    enabled = false
+}
+tasks.named('bootJar').configure {
+    enabled = false
+}
+
+// build.gradle of gnmi_microservice
+tasks.named('test').configure {
+    enabled = false
+}
+
+
 repositories {
     mavenCentral()
 }

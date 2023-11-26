@@ -25,7 +25,8 @@ dependencies {
     implementation project(':gNMI_microservice')
     implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
     implementation 'org.springdoc:springdoc-openapi-webmvc-core:1.7.0'
-
+    // Spring Boot Test Starter
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // gRPC
     implementation 'io.grpc:grpc-netty-shaded:1.58.0'
     implementation 'io.grpc:grpc-protobuf:1.58.0'
@@ -38,11 +39,26 @@ dependencies {
     //implementation 'io.netty:netty-handler:4.1.68.Final'
     //implementation 'io.netty:netty-tcnative-boringssl-static:2.0.46.Final' // This provides the native SSL implementation for Netty
 
-
-
-
-
 }
+
+bootRun {
+    mainClass = 'com.ericsson.networkdevice.NorthboundComponentApplication'
+}
+
+test {
+    useJUnitPlatform()
+    // additional test configurations if necessary
+}
+
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.ericsson.networkdevice.NorthboundComponentApplication'
+        )
+    }
+}
+
 
 test {
     useJUnitPlatform()

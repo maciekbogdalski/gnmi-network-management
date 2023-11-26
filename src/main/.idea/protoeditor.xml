@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProtobufLanguageSettings">
+    <option name="autoConfigEnabled" value="false" />
+    <option name="importPathEntries">
+      <list>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/src/test/java" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/src/test/resources" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/src/main/java" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/src/main/resources" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/common/src/test/java" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/common/src/test/resources" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/common/src/main/java" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/common/src/main/resources" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/northbound-component/src/test/java" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/northbound-component/src/test/resources" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/northbound-component/src/main/java" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/northbound-component/src/main/resources" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/server/src/test/java" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/server/src/main/java" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/server/src/main/resources" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/southbound-component/src/test/java" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/southbound-component/src/test/resources" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/southbound-component/src/main/java" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/southbound-component/src/main/resources" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/gNMI_microservice/src/test/java" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/gNMI_microservice/build/generated/source/proto/main/java" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/gNMI_microservice/build/generated/source/proto/main/grpc" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/gNMI_microservice/src/main/java" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/gNMI_microservice/src/main/resources" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$USER_HOME$/AppData/Local/JetBrains/IntelliJIdea2022.3/protoeditor" />
+        </ImportPathEntry>
+        <ImportPathEntry>
+          <option name="location" value="file://$PROJECT_DIR$/gNMI_microservice/src/main/proto" />
+        </ImportPathEntry>
+      </list>
+    </option>
+    <option name="descriptorPath" value="google/protobuf/descriptor.proto" />
+  </component>
+</project>
