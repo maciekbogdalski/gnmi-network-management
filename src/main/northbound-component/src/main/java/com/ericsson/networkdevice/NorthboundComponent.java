@@ -12,22 +12,37 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 
+
+
+/**
+ * The NorthboundComponent class serves as the interface for external clients.
+ * It processes requests related to device management, subscription management, and configuration.
+ * Interacts with DeviceManager for device catalog operations and SouthboundComponent for device communication.
+ */
 @Service
 public class NorthboundComponent {
 
+    // Dependency injections for various components used in this class.
     @Autowired
     private DeviceManager deviceManager;
     @Autowired
-    private GnmiServerManager gnmiServerManager; // You will inject or instantiate this
+    private GnmiServerManager gnmiServerManager; // Manages gNMI server instances.
 
     @Autowired
     private SouthboundComponent southboundComponent;
 
+    // Constructor for NorthboundComponent
     public NorthboundComponent(DeviceManager deviceManager, SouthboundComponent southboundComponent) {
         this.deviceManager = deviceManager;
         this.southboundComponent = southboundComponent;
     }
 
+    /**
+     * Manages the addition or deletion of network devices.
+     * @param operation The operation type (add/delete).
+     * @param deviceInfoDTO Data transfer object containing device information.
+     * @return Confirmation of the operation's outcome.
+     */
     public Confirmation manageDevice(String operation, DeviceManagementDTO deviceInfoDTO) {
         try {
             if ("add".equals(operation)) {
@@ -64,18 +79,36 @@ public class NorthboundComponent {
         }
     }
 
+
+    /**
+     * Checks if a device is present in the device manager.
+     * @param address The IP address of the device.
+     * @param port The port number of the device.
+     * @return true if the device is present, false otherwise.
+     */
     public boolean isDevicePresent(String address, int port) {
         return deviceManager.getDevice(address, port) != null;
     }
 
 
 
+    /**
+     * Manages subscriptions and returns a confirmation message.
+     * @param operation The subscription operation (create/delete).
+     * @param subscriptionDTO Data transfer object containing subscription details.
+     * @return Confirmation of the subscription operation's completion.
+     */
     public Confirmation manageSubscriptionWithConfirmation(String operation, SubscriptionManagementDTO subscriptionDTO) {
         manageSubscription(operation, subscriptionDTO);
         return new Confirmation("Subscription " + operation + " operation completed successfully for device at IP: " + subscriptionDTO.getAddress() + " and port: " + subscriptionDTO.getPort());
     }
 
 
+    /**
+     * Manages subscriptions without returning a confirmation message.
+     * @param operation The subscription operation (create/delete).
+     * @param subscriptionDTO Data transfer object containing subscription details.
+     */
     public void manageSubscription(String operation, SubscriptionManagementDTO subscriptionDTO) {
         NetworkDevice device = deviceManager.getDevice(subscriptionDTO.getAddress(), subscriptionDTO.getPort());
         if (device == null) {
@@ -94,10 +127,23 @@ public class NorthboundComponent {
     }
 
 
+    /**
+     * Retrieves the configuration of a specified network device.
+     * @param address The IP address of the device.
+     * @param port The port number of the device.
+     * @return The device's configuration.
+     */
     public String getDeviceConfiguration(String address, int port) {
         return deviceManager.getDeviceConfiguration(address, port);
     }
 
+
+    /**
+     * Updates the configuration of a specified network device.
+     * @param address The IP address of the device.
+     * @param port The port number of the device.
+     * @param newConfiguration The new configuration to be set on the device.
+     */
     public void updateConfiguration(String address, int port, String newConfiguration) {
         // Validate input, handle exceptions as needed
         NetworkDevice device = deviceManager.getDevice(address, port);
