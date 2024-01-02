@@ -17,14 +17,17 @@ import com.ericsson.networkdevice.dto.Confirmation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ * REST Controller for handling GNMI (gRPC Network Management Interface) related operations.
+ * Provides endpoints for device management, subscription handling, and GNMI capabilities.
+ */
 @RestController
 @RequestMapping("/gnmi")
 @Tag(name = "GNMI Controller", description = "GNMI related operations")
 public class GnmiController {
 
+    // Service dependencies...
     private final GnmiService gnmiService;
-
     private final NorthboundComponent northboundComponent;
     public static final Logger logger = LoggerFactory.getLogger(GnmiController.class);
     private boolean isConfigurationEmpty(Configuration configuration) {
@@ -33,13 +36,14 @@ public class GnmiController {
 
 
 
-
+    // Constructor...
     @Autowired
     public GnmiController(GnmiService gnmiService, NorthboundComponent northboundComponent) {
         this.gnmiService = gnmiService;
         this.northboundComponent = northboundComponent;
     }
 
+    // Endpoint to get GNMI capabilities of a device.
     @GetMapping("/capabilities/{address}/{port}")
     public CapabilityResponseDTO getCapabilities(@PathVariable String address, @PathVariable int port) {
         CapabilityResponse capabilityResponse = gnmiService.getCapabilities(address, port);
@@ -56,12 +60,13 @@ public class GnmiController {
         return dto;
     }
 
-
+    // Simple test endpoint to check if the service is running.
     @GetMapping("/test")
     public String testEndpoint() {
         return "Test successful!";
     }
 
+    // Endpoint to add a network device.
     @PostMapping("/device")
     public ResponseEntity<String> manageDevice(@RequestBody DeviceManagementDTO deviceDTO) {
         try {
@@ -72,6 +77,7 @@ public class GnmiController {
         }
     }
 
+    // Endpoint to remove a network device.
     @DeleteMapping("/device")
     public ResponseEntity<String> removeDevice(@RequestBody DeviceManagementDTO deviceDTO) {
         try {
@@ -82,6 +88,7 @@ public class GnmiController {
         }
     }
 
+    // Endpoint to create a subscription for a device.
     @PostMapping("/subscription")
     public ResponseEntity<String> createSubscription(@RequestBody SubscriptionManagementDTO subscriptionDTO) {
         try {
@@ -92,6 +99,7 @@ public class GnmiController {
         }
     }
 
+    // Endpoint to manage a subscription with a confirmation response.
     @PostMapping("/manageSubscription")
     public ResponseEntity<Confirmation> manageSubscription(
             @RequestParam String operation,
@@ -106,7 +114,7 @@ public class GnmiController {
     }
 
 
-
+    // Endpoint to cancel a subscription for a device.
     @DeleteMapping("/subscription")
     public ResponseEntity<String> cancelSubscription(@RequestBody SubscriptionManagementDTO subscriptionDTO) {
         try {
@@ -117,6 +125,7 @@ public class GnmiController {
         }
     }
 
+    // Endpoint to verify if a device is present in the system.
     @GetMapping("/verifyDevice/{address}/{port}")
     public ResponseEntity<String> verifyDevice(@PathVariable String address, @PathVariable int port) {
         boolean deviceExists = northboundComponent.isDevicePresent(address, port);
@@ -127,6 +136,7 @@ public class GnmiController {
         }
     }
 
+    // Endpoint to retrieve the configuration of a network device.
     @GetMapping("/deviceConfiguration/{address}/{port}")
     public ResponseEntity<String> getDeviceConfiguration(@PathVariable String address, @PathVariable int port) {
         String configuration = northboundComponent.getDeviceConfiguration(address, port);
@@ -137,6 +147,7 @@ public class GnmiController {
         }
     }
 
+    // Endpoint to update the configuration of a network device.
     @PostMapping("/configuration/{address}/{port}")
     public ResponseEntity<String> updateDeviceConfiguration(@PathVariable String address, @PathVariable int port, @RequestBody String newConfiguration) {
         try {

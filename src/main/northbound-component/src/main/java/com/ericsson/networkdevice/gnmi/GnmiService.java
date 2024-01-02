@@ -14,6 +14,10 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 import io.grpc.ManagedChannelBuilder;
 
+/**
+ * Service class for handling gNMI (gRPC Network Management Interface) operations.
+ * Provides methods for retrieving GNMI data, device capabilities, and device configurations using gRPC.
+ */
 @Service
 public class GnmiService {
 
@@ -22,6 +26,9 @@ public class GnmiService {
 
     private static final Logger logger = LoggerFactory.getLogger(GnmiService.class);  // <-- Create a logger instance
 
+    /**
+     * Constructor to initialize the gNMI service with a gRPC channel and client.
+     */
     public GnmiService() {
         this.channel = NettyChannelBuilder.forAddress("localhost", 9339)
                 .usePlaintext()
@@ -29,6 +36,11 @@ public class GnmiService {
         this.gnmiClient = gNMIGrpc.newBlockingStub(channel);
     }
 
+    /**
+     * Retrieves GNMI data for a given path.
+     * @param path The GNMI path for which data is requested.
+     * @return GetResponse containing the requested GNMI data.
+     */
     public GetResponse getGnmiData(String path) {
         // Validate input
         if (path == null || path.trim().isEmpty()) {
@@ -64,6 +76,12 @@ public class GnmiService {
         return gNMIGrpc.newBlockingStub(channel);
     }
 
+    /**
+     * Fetches the capabilities of a device using its address and port.
+     * @param address The IP address of the device.
+     * @param port The port number of the device.
+     * @return CapabilityResponse containing the device capabilities.
+     */
     public CapabilityResponse getCapabilities(String address, int port) {
         ManagedChannel channel = null;
         try {
@@ -98,6 +116,11 @@ public class GnmiService {
         }
     }
 
+    /**
+     * Retrieves the configuration of a specific device identified by its device ID.
+     * @param deviceId The unique identifier of the device.
+     * @return GetResponse containing the device configuration.
+     */
     public GetResponse getDeviceConfiguration(String deviceId) {
         // Validate the deviceId input
         if (deviceId == null || deviceId.trim().isEmpty()) {
@@ -129,6 +152,9 @@ public class GnmiService {
         }
     }
 
+    /**
+     * Shuts down the gNMI service and closes the gRPC channel.
+     */
     public void shutdown() {
         logger.info("Shutting down the gNMI service.");  // <-- Log the shutdown process
         channel.shutdown();

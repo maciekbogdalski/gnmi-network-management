@@ -1,12 +1,18 @@
 package com.ericsson.networkdevice.dto;
 
+/**
+ * Data Transfer Object for managing subscriptions on network devices.
+ * Contains information like the device's IP address, port, type of subscription, and polling interval.
+ */
 public class SubscriptionManagementDTO {
     private String address; // The IP address of the device
     private Integer port; // The port of the device
     private String subscriptionType;
-    private Integer pollingInterval;
+    private Integer pollingInterval; // Interval in seconds for polling, applicable for periodic subscriptions
 
-    // Default constructor for JSON deserialization
+    /**
+     * Default constructor, primarily used for JSON deserialization.
+     */
     public SubscriptionManagementDTO() {}
 
     // Getters and Setters
@@ -42,6 +48,5 @@ public class SubscriptionManagementDTO {
         this.pollingInterval = pollingInterval;
     }
 
-    // You might want to remove the deviceId getter and setter,
-    // or repurpose them if the deviceId is still needed for other operations.
+
 }

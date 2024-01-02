@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test class for NorthboundComponent.
+ * Validates the functionality of device management operations like adding or removing devices.
+ */
 @SpringBootTest
 public class NorthboundComponentTest {
 
@@ -16,6 +20,10 @@ public class NorthboundComponentTest {
 
     private DeviceManagementDTO deviceDTO;
 
+    /**
+     * Sets up test data before each test.
+     * Initializes a DeviceManagementDTO object with predefined data for testing.
+     */
     @BeforeEach
     void setUp() {
         deviceDTO = new DeviceManagementDTO();
@@ -25,6 +33,10 @@ public class NorthboundComponentTest {
         // ... other properties
     }
 
+    /**
+     * Tests the 'add device' functionality of the NorthboundComponent.
+     * Verifies if the device is added successfully and if the correct confirmation message is returned.
+     */
     @Test
     void whenAddDevice_thenDeviceIsAdded() {
         // Act
